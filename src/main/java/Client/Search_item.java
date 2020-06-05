@@ -17,11 +17,13 @@ public class Search_item extends JPanel{
     public Search_item() {
         setBackground(Color.darkGray);
         setBorder(BorderFactory.createLineBorder(Color.white, 2));
+        setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
     }
 
     public Search_item(FullItem it, int num) {
         setBackground(Color.darkGray);
         setBorder(BorderFactory.createLineBorder(Color.white, 2));
+        setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
         number = num;
         item = it;
         DrawItem();
@@ -30,6 +32,7 @@ public class Search_item extends JPanel{
     public Search_item(String namestring, String typestring, int num) {
         setBackground(Color.darkGray);
         setBorder(BorderFactory.createLineBorder(Color.white, 2));
+        setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
         number = num;
         item = new FullItem();
         item.Name = namestring;
@@ -55,9 +58,13 @@ public class Search_item extends JPanel{
         type.setForeground(Color.white);
         type.setBackground(Color.DARK_GRAY);
 
+        add(Box.createHorizontalGlue());
         add(number_label);
+        add(Box.createHorizontalGlue());
         add(name);
+        add(Box.createHorizontalGlue());
         add(type);
+        add(Box.createHorizontalGlue());
 
         addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent e) {

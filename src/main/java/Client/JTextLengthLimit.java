@@ -1,17 +1,17 @@
 package Client;
 
 import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
+import javax.swing.text.BadLocationException;
 
-class JTextFieldLimit extends PlainDocument {
+class JTextLengthLimit extends PlainDocument {
     private int limit;
-    JTextFieldLimit(int limit) {
+    JTextLengthLimit(int limit) {
         super();
         this.limit = limit;
     }
 
-    JTextFieldLimit(int limit, boolean upper) {
+    JTextLengthLimit(int limit, boolean upper) {
         super();
         this.limit = limit;
     }
@@ -25,3 +25,6 @@ class JTextFieldLimit extends PlainDocument {
         }
     }
 }
+
+
+    //textfield1.setDocument(new JTextLengthLimit(10));

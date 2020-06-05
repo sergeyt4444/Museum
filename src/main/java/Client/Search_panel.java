@@ -2,6 +2,8 @@ package Client;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Search_panel extends JPanel {
 
@@ -20,6 +22,7 @@ public class Search_panel extends JPanel {
         setLayout(null);
         setBackground(Color.darkGray);
         setBorder(BorderFactory.createLineBorder(Color.white, 2));
+        setPreferredSize(new Dimension(600, 200));
         Font font = new Font("Times New Roman", Font.PLAIN, 20);
         Font small = new Font("Times New Roman", Font.PLAIN, 16);
         String[] sort_options = new String[] {"По алфавиту", "По популярности"};
@@ -62,6 +65,26 @@ public class Search_panel extends JPanel {
         add(rb1);
         add(rb2);
         add(rb3);
+
+        search.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String search_request = search_ta.getText();
+                int selected = 0;
+                if (rb1.isSelected()) {
+                    selected = 1;
+                }
+                else {
+                    if (rb2.isSelected()) {
+                        selected = 2;
+                    }
+                    else {
+                        selected = 3;
+                    }
+                }
+                Client.search(search_request, selected);
+            }
+        });
     }
 
 }
