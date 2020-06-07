@@ -11,7 +11,7 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column (name = "Name")
+    @Column (name = "Name", unique = true)
     private String Name;
 
     @Column (name = "Type")

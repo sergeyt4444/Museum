@@ -35,6 +35,11 @@ public class Search_Full_panel extends JPanel {
 
     void Init(NShortItems nsitems, int num) {
         search_page.Init(nsitems, num);
+        Search_Nav_Panel.page.setText("1");
+    }
+
+    void SoftInit(NShortItems nsitems,int num) {
+        search_page.SoftInit(nsitems, num);
     }
 
 }

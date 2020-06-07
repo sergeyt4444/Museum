@@ -58,7 +58,7 @@ public class Search_item extends JPanel{
         type.setForeground(Color.white);
         type.setBackground(Color.DARK_GRAY);
 
-        add(Box.createHorizontalGlue());
+        add(Box.createRigidArea(new Dimension(12, 0)));
         add(number_label);
         add(Box.createHorizontalGlue());
         add(name);
@@ -68,7 +68,7 @@ public class Search_item extends JPanel{
 
         addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent e) {
-
+                Client.view(number);
             }
 
             public void mousePressed(MouseEvent e) {

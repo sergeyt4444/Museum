@@ -26,7 +26,7 @@ public class gui_test2 extends JPanel {
             fi.setType("Type" + i);
             itmes.add(fi);
         }
-        NShortItems nsi = new NShortItems(itmes, 0);
+        NShortItems nsi = new NShortItems(itmes, 0, 10);
         Search_page item1 = new Search_page(nsi, 10);
         item1.setBounds(50, 50, 500, 800);
         add(item1);

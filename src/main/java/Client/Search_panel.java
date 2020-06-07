@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class Search_panel extends JPanel {
 
@@ -34,7 +36,7 @@ public class Search_panel extends JPanel {
         group = new ButtonGroup();
         rb1 = new JRadioButton("По названию", true);
         rb2 = new JRadioButton("<html>По ключевым<br> словам</html>");
-        rb3 = new JRadioButton("По экспозиции");
+        rb3 = new JRadioButton("По типу");
         group.add(rb1);
         group.add(rb2);
         group.add(rb3);
@@ -66,6 +68,37 @@ public class Search_panel extends JPanel {
         add(rb2);
         add(rb3);
 
+        search_ta.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    String search_request = search_ta.getText();
+                    int selected = 0;
+                    if (rb1.isSelected()) {
+                        selected = 1;
+                    }
+                    else {
+                        if (rb2.isSelected()) {
+                            selected = 2;
+                        }
+                        else {
+                            selected = 3;
+                        }
+                    }
+                    Client.search(search_request, selected);
+                }
+            }
+
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

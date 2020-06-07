@@ -2,9 +2,11 @@ package Items;
 
 import javax.persistence.*;
 
-@Table (name = "Keywords")
+@Table (name = "Keywords",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"ItemID", "Keyword"})})
 @Entity
 public class Keywords {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

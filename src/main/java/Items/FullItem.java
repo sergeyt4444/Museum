@@ -36,11 +36,7 @@ public class FullItem {
     }
 
     public void Delete_Keyword(String str) {
-        for (String string : Keywords) {
-            if (str == string) {
-                Keywords.remove(string);
-            }
-        }
+                Keywords.remove(str);
     }
 
 }

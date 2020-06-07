@@ -4,6 +4,8 @@ import Items.Item;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Edit_panel extends JPanel {
 
@@ -56,6 +58,21 @@ public class Edit_panel extends JPanel {
         type_label.setAlignmentX(0.2f);
         edit_ta.setAlignmentX(0.2f);
         buttons_panel.setAlignmentX(0.2f);
+
+        confirm.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Client.commit_edit(Name, Type, edit_ta.getText());
+            }
+        });
+
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Client.close_edit();
+            }
+        });
+
         add(name_label);
         add(type_label);
         add(edit_ta);
@@ -100,6 +117,21 @@ public class Edit_panel extends JPanel {
         type_label.setAlignmentX(0.2f);
         edit_ta.setAlignmentX(0.2f);
         buttons_panel.setAlignmentX(0.2f);
+
+        confirm.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Client.commit_edit(Name, Type, edit_ta.getText());
+            }
+        });
+
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Client.close_edit();
+            }
+        });
+
         add(name_label);
         add(Box.createRigidArea(new Dimension(0,20)));
         add(type_label);
@@ -114,6 +146,9 @@ public class Edit_panel extends JPanel {
                 switch (EditType) {
                     case "Type": {
                         Type = "Тип";
+                        if (item.getType() == null) {
+                            item.setType("");
+                        }
                         Placeholder = item.getType();
                         edit_ta.setDocument(new JTextLengthLimit(25));
                         break;
@@ -126,24 +161,36 @@ public class Edit_panel extends JPanel {
                     }
                     case "Parameters": {
                         Type = "Технические параметры";
+                        if (item.getParameters() == null) {
+                            item.setParameters("");
+                        }
                         Placeholder = item.getParameters();
                         edit_ta.setDocument(new JTextLengthLimit(250));
                         break;
                     }
                     case "Lib": {
                         Type = "Литература";
+                        if (item.getLib() == null) {
+                            item.setLib("");
+                        }
                         Placeholder = item.getLib();
                         edit_ta.setDocument(new JTextLengthLimit(250));
                         break;
                     }
                     case "Links": {
                         Type = "Ссылки";
+                        if (item.getLinks() == null) {
+                            item.setLinks("");
+                        }
                         Placeholder = item.getLinks();
                         edit_ta.setDocument(new JTextLengthLimit(250));
                         break;
                     }
                     case "Annotation": {
                         Type = "Описание";
+                        if (item.getAnnotation() == null) {
+                            item.setAnnotation("");
+                        }
                         Placeholder = item.getAnnotation();
                         edit_ta.setDocument(new JTextLengthLimit(500));
                         break;
@@ -160,6 +207,75 @@ public class Edit_panel extends JPanel {
             type_label.setText(Type);
             edit_ta.setText(Placeholder);
         }
+    }
+
+    public void Init(Item item, String EditType) {
+        if (item != null && EditType != null) {
+            Name = item.getName();
+            switch (EditType) {
+                case "Type": {
+                    Type = "Тип";
+                    if (item.getType() == null) {
+                        item.setType("");
+                    }
+                    Placeholder = item.getType();
+                    edit_ta.setDocument(new JTextLengthLimit(25));
+                    break;
+                }
+                case "Name": {
+                    Type = "Название";
+                    Placeholder = item.getName();
+                    edit_ta.setDocument(new JTextLengthLimit(50));
+                    break;
+                }
+                case "Parameters": {
+                    Type = "Технические параметры";
+                    if (item.getParameters() == null) {
+                        item.setParameters("");
+                    }
+                    Placeholder = item.getParameters();
+                    edit_ta.setDocument(new JTextLengthLimit(250));
+                    break;
+                }
+                case "Lib": {
+                    Type = "Литература";
+                    if (item.getLib() == null) {
+                        item.setLib("");
+                    }
+                    Placeholder = item.getLib();
+                    edit_ta.setDocument(new JTextLengthLimit(250));
+                    break;
+                }
+                case "Links": {
+                    Type = "Ссылки";
+                    if (item.getLinks() == null) {
+                        item.setLinks("");
+                    }
+                    Placeholder = item.getLinks();
+                    edit_ta.setDocument(new JTextLengthLimit(250));
+                    break;
+                }
+                case "Annotation": {
+                    Type = "Описание";
+                    if (item.getAnnotation() == null) {
+                        item.setAnnotation("");
+                    }
+                    Placeholder = item.getAnnotation();
+                    edit_ta.setDocument(new JTextLengthLimit(500));
+                    break;
+                }
+                default: {
+                    Type = "Error";
+                    Placeholder = "Error";
+                    edit_ta.setDocument(new JTextLengthLimit(10));
+                    break;
+                }
+            }
+
+        }
+        name_label.setText(Name);
+        type_label.setText(Type);
+        edit_ta.setText(Placeholder);
     }
 
 }

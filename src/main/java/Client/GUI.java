@@ -18,8 +18,11 @@ public class GUI extends JPanel {
     public static Search_Full_panel search_full_panel;
     public static Search_page search_page;
     public static Search_Nav_Panel search_nav_panel;
+    public static Item_panel item_panel;
+    public static Edit_panel edit_panel;
     public static Nav_panel nav_panel;
-//    public static Moderator_panel moderator_panel;
+    public static JPanel special_panel;
+    public static Moderator_panel moderator_panel;
     public static Admin_panel admin_panel;
 
 
@@ -31,6 +34,11 @@ public class GUI extends JPanel {
         user_panel = new JPanel();
         user_panel.setBounds(960, 0, 300, 200);
         user_panel.setLayout(new BoxLayout(user_panel, BoxLayout.PAGE_AXIS));
+        special_panel = new JPanel();
+        special_panel.setBounds(960,300,300,300);
+        special_panel.setLayout(new BoxLayout(special_panel, BoxLayout.PAGE_AXIS));
+        special_panel.setBackground(Color.DARK_GRAY);
+        special_panel.setBorder(BorderFactory.createEmptyBorder());
         login_panel = new Sign_in_panel();
         nav_panel = new Nav_panel();
         nav_panel.setBounds(20, 40, 200, 400);
@@ -57,6 +65,7 @@ public class GUI extends JPanel {
 //        admin_panel = new Admin_panel();
 //        admin_panel.setBounds(960,300,300,300);
         add(user_panel);
+        add(special_panel);
         add(nav_panel);
         add(central_panel);
 //        add(moderator_panel);

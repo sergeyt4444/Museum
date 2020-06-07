@@ -81,7 +81,7 @@ public class Register_panel extends JPanel {
                     JOptionPane.showMessageDialog(null, "Проверьте написание пароля");
                 }
                 //send and check
-                int check = 1;
+                int check = Client.create_user(login, pass1);
                 if (check == 1) {
                     Client.login(login, "User");
                     Client.mainpage();
