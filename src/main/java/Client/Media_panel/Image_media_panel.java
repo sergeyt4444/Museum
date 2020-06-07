@@ -1,15 +1,22 @@
 package Client.Media_panel;
 
+
+
+import org.apache.commons.io.FileUtils;
 import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Optional;
 
 public class Image_media_panel extends JPanel implements Abstract_Media_panel{
     public JButton icon;
@@ -17,12 +24,19 @@ public class Image_media_panel extends JPanel implements Abstract_Media_panel{
     public JLabel filename_label;
     public JButton upload;
     public JButton delete;
+    public File file_img;
     public BufferedImage full_img;
     public BufferedImage icon_img;
     public String filename;
 
 
     public void setImage(BufferedImage image) {
+        try {
+            ImageIO.write(image, Optional.ofNullable(filename).filter(f -> f.contains("."))
+                    .map(f -> f.substring(filename.lastIndexOf(".") + 1)).orElse(""),file_img );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         full_img = image;
         //icon_img is a small full_img
         icon_img = Scalr.resize(full_img, 100);
@@ -33,6 +47,7 @@ public class Image_media_panel extends JPanel implements Abstract_Media_panel{
     }
 
     public void setImage(File f) {
+        file_img = f;
         try {
             full_img = ImageIO.read(f);
         } catch (IOException e) {
@@ -64,6 +79,7 @@ public class Image_media_panel extends JPanel implements Abstract_Media_panel{
                     frame = new JFrame(filename);
                     frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                     frame.setSize(full_img.getWidth(), full_img.getHeight());
+                    frame.setMinimumSize(new Dimension(100, 100));
                     JLabel label = new JLabel();
                     label.setIcon(new ImageIcon(full_img));
                     frame.add(label);
@@ -89,7 +105,27 @@ public class Image_media_panel extends JPanel implements Abstract_Media_panel{
             upload.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    JFileChooser uploader = new JFileChooser();
+                    uploader.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
+                    uploader.setDialogTitle("Save image");
+
+                    int approved = uploader.showSaveDialog(null);
+                    if (approved == JFileChooser.APPROVE_OPTION) {
+                        String url = uploader.getSelectedFile().toString()+"\\" + filename;
+                        File file = new File(url);
+                        String ext = (Optional.ofNullable(filename).filter(f -> f.contains("."))
+                                .map(f -> f.substring(filename.lastIndexOf(".") + 1))).orElse("");
+                        try {
+                            ImageIO.write(full_img, ext, file);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+
+
+                        System.out.println(uploader.getSelectedFile()+"\\" + filename);
+
+                    }
                 }
             });
 

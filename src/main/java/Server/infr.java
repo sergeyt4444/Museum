@@ -89,6 +89,15 @@ public class infr {
         return arr;
     }
 
+    public ArrayList<Media> getMediabyIID(int item_id) {
+        Query query = sessionFactory.openSession().createQuery("From Media where ItemID = :iid");
+        query.setParameter("iid", item_id);
+        List<Media> list = query.list();
+        ArrayList<Media> arr = new ArrayList<>(list.size());
+        arr.addAll(list);
+        return arr;
+    }
+
     public User getUserbyLogPass(String login, String password) {
 //        List<User> list = sessionFactory.openSession().createQuery("From User where login = :log and password = :pass").list();
         Query query = sessionFactory.openSession().createQuery("From User where login = :log and password = :pass");

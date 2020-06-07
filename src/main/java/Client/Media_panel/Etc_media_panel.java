@@ -1,6 +1,8 @@
 package Client.Media_panel;
 
 
+import org.apache.commons.io.FileUtils;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Optional;
 
 public class Etc_media_panel extends JPanel implements Abstract_Media_panel{
     public JButton icon;
@@ -45,15 +49,15 @@ public class Etc_media_panel extends JPanel implements Abstract_Media_panel{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        filename = f.getName();
     }
 
     public void setFile(File f) {
         file = f;
+        filename = f.getName();
     }
 
     public void Init() {
-        if (img != null) {
+        if (file != null) {
             Font font = new Font("Times New Roman", Font.PLAIN, 16);
             icon = new JButton(new ImageIcon(img));
             icon.setMargin(new Insets(0, 0, 0, 0));
@@ -82,7 +86,29 @@ public class Etc_media_panel extends JPanel implements Abstract_Media_panel{
             upload.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    JFileChooser uploader = new JFileChooser();
+                    uploader.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
+                    uploader.setDialogTitle("Save file");
+
+                    int approved = uploader.showSaveDialog(null);
+                    if (approved == JFileChooser.APPROVE_OPTION) {
+                        String url = uploader.getSelectedFile().toString()+"\\" + filename;
+                        File newfile = new File(url);
+                        String ext = (Optional.ofNullable(filename).filter(f -> f.contains("."))
+                                .map(f -> f.substring(filename.lastIndexOf(".") + 1))).orElse("");
+                        try {
+                            Files.createDirectories(newfile.toPath().getParent());
+                            Files.createFile(newfile.toPath());
+
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+
+
+                        System.out.println(uploader.getSelectedFile()+"\\" + filename);
+
+                    }
                 }
             });
 

@@ -8,6 +8,7 @@ import Items.Keywords;
 import Items.Media;
 import Users.User;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -37,6 +38,15 @@ public class model {
 
     public ArrayList<Edit> getEdits() {
         return inf.getEdits();
+    }
+
+    public ArrayList<File> getMediabyIID(int item_id) {
+        ArrayList<Media> media = inf.getMediabyIID(item_id);
+        ArrayList<File> files = new ArrayList<>(media.size());
+        for (Media med: media) {
+            files.add(new File(med.getMedia_path()));
+        }
+        return files;
     }
 
     public User getUserbyLogPass(String login, String password) {

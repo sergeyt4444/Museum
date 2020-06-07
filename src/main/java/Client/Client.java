@@ -363,12 +363,14 @@ public class Client {
             String response = input.readUTF();
             Type type1 = new TypeToken<FullItem>(){}.getType();
             FullItem fitem = json.fromJson(response, type1);
-
+  //          response = input.readUTF();
+  //          Type type2 = new TypeToken<ArrayList<File>>(){}.getType();
+   //         ArrayList<File> files = json.fromJson(response, type2);
             if (GUI.item_panel == null) {
-                GUI.item_panel = new Item_panel(fitem);
+                GUI.item_panel = new Item_panel(fitem, files);
             }
             else {
-                GUI.item_panel.Init(fitem);
+                GUI.item_panel.Init(fitem, files);
             }
             GUI.central_panel.add(GUI.item_panel);
             jFrame.validate();
@@ -492,7 +494,7 @@ public class Client {
         }
     }
 
-    public static void remove_keyword(FullItem item, String keyword) {
+    public static void remove_keyword(FullItem item, String keyword, ArrayList<File> files) {
         if (GUI.signed_in_panel == null) {
             JOptionPane.showMessageDialog(null, "Не хватает привелегий");
         }
@@ -506,7 +508,7 @@ public class Client {
                     output.writeUTF(keyword);
 
                     item.Delete_Keyword(keyword);
-                    GUI.item_panel.Init(item);
+                    GUI.item_panel.Init(item, files);
                     jFrame.validate();
                     jFrame.repaint();
                 } catch (IOException e) {
@@ -519,7 +521,7 @@ public class Client {
         }
     }
 
-    public static void add_keyword(FullItem item) {
+    public static void add_keyword(FullItem item, ArrayList<File> files) {
         if (GUI.signed_in_panel == null) {
             JOptionPane.showMessageDialog(null, "Не хватает привелегий");
         }
@@ -545,7 +547,7 @@ public class Client {
                             output.write(Signed_in_panel.user.getId());
                             output.writeUTF(new_keyword);
                             item.Add_Keyword(new_keyword);
-                            GUI.item_panel.Init(item);
+                            GUI.item_panel.Init(item, files);
                             jFrame.validate();
                             jFrame.repaint();
                         } catch (IOException e) {

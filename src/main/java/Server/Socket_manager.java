@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -137,7 +138,11 @@ public class Socket_manager extends Thread {
                                 fullItem.Add_Keyword(keyword.getKeyword());
                             }
                         }
+                        ArrayList<File> files = Server.m.getMediabyIID(fullItem.id);
                         output.writeUTF(json.toJson(fullItem));
+
+//                        output.writeUTF(json.toJson(files));
+
                         break;
                     }
                     case "check_for_bans" : {
