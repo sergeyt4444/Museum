@@ -24,6 +24,7 @@ public class GUI extends JPanel {
     public static JPanel special_panel;
     public static Moderator_panel moderator_panel;
     public static Admin_panel admin_panel;
+    public static Bans_view_panel bans_view;
 
 
     public GUI() {

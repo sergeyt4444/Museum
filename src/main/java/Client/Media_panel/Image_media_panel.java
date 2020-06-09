@@ -47,7 +47,7 @@ public class Image_media_panel extends JPanel implements Abstract_Media_panel{
     }
 
     public void setImage(File f) {
-        file_img = f;
+        file_img = new File("src/main/resources/tmp"+f.getName());
         try {
             full_img = ImageIO.read(f);
         } catch (IOException e) {

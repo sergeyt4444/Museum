@@ -2,6 +2,8 @@ package Client;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Moderator_panel extends JPanel {
 
@@ -34,6 +36,12 @@ public class Moderator_panel extends JPanel {
         ban_history_button = new JButton("История банов");
         ban_history_button.setFont(font);
         ban_history_button.setAlignmentX(CENTER_ALIGNMENT);
+        ban_history_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Client.bans();
+            }
+        });
         ban_button = new JButton("Забанить пользователя");
         ban_button.setFont(font);
         ban_button.setAlignmentX(CENTER_ALIGNMENT);

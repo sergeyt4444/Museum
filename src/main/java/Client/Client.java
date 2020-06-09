@@ -1,5 +1,6 @@
 package Client;
 
+import Bans.JoinedBan;
 import Items.FullItem;
 import Items.Item;
 import Items.NShortItems;
@@ -12,13 +13,17 @@ import java.awt.event.WindowListener;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.TimeZone;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import org.apache.commons.io.FileUtils;
 
 public class Client {
 
@@ -74,6 +79,7 @@ public class Client {
                 if (finalSocket != null) {
                     try {
                         finalSocket.close();
+                        FileUtils.deleteDirectory(new File("src/main/resources/tmp"));
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -183,6 +189,7 @@ public class Client {
         GUI.user_panel.add(GUI.login_panel);
         GUI.special_panel.removeAll();
         jFrame.repaint();
+        mainpage();
     }
 
     public static void register() {
@@ -190,6 +197,9 @@ public class Client {
         if (GUI.register_panel == null) {
             GUI.register_panel = new Register_panel();
             GUI.register_panel.setBounds(0, 0, 600, 400);
+        }
+        else {
+            GUI.register_panel.clear();
         }
         GUI.central_panel.add(GUI.register_panel);
         jFrame.repaint();
@@ -210,6 +220,41 @@ public class Client {
             return 1;
         }
         return 0;
+    }
+
+    public static void bans() {
+        //send parameters and get results
+        try {
+            GUI.central_panel.removeAll();
+            output.writeUTF("bans");
+            Gson json = new GsonBuilder().setPrettyPrinting().create();
+            String response = input.readUTF();
+            Type type1 = new TypeToken<ArrayList<JoinedBan>>(){}.getType();
+            ArrayList<JoinedBan> jbans = json.fromJson(response, type1);
+            if (GUI.bans_view == null) {
+                GUI.bans_view = new Bans_view_panel();
+            }
+            GUI.bans_view.Init(jbans);
+            GUI.central_panel.add(GUI.bans_view);
+            jFrame.validate();
+            jFrame.repaint();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void delete_ban(int BanID) {
+        try {
+            output.writeUTF("delete_ban");
+            output.write(BanID);
+            jFrame.validate();
+            jFrame.repaint();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 
@@ -363,9 +408,61 @@ public class Client {
             String response = input.readUTF();
             Type type1 = new TypeToken<FullItem>(){}.getType();
             FullItem fitem = json.fromJson(response, type1);
-  //          response = input.readUTF();
-  //          Type type2 = new TypeToken<ArrayList<File>>(){}.getType();
-   //         ArrayList<File> files = json.fromJson(response, type2);
+            response = input.readUTF();
+            Type type2 = new TypeToken<ArrayList<File>>(){}.getType();
+            ArrayList<File> files = json.fromJson(response, type2);
+            List<byte[]> file_list = new ArrayList<>();
+
+
+            for (File fl : files) {
+                String filename = fl.getName();
+                String ext = (Optional.ofNullable(filename).filter(f -> f.contains("."))
+                        .map(f -> f.substring(filename.lastIndexOf(".") + 1))).orElse("");
+                switch (ext) {
+                    case "jpg":{
+
+                    }
+                    case "bmp": {
+
+                    }
+                    case "png": {
+                        byte[] buffer = new byte[100*1024];
+                        String adress = "127.0.0.1";
+                        InetAddress ip = null;
+                        Socket socket = null;
+                        DataOutputStream dos = null;
+                        ip = InetAddress.getByName(adress);
+
+                        socket = new Socket(ip, 4443);
+                        dos = new DataOutputStream(socket.getOutputStream());
+                        dos.writeUTF("load_file");
+                        dos.writeUTF(fl.toPath().toString());
+
+                        BufferedInputStream in =
+                                new BufferedInputStream(socket.getInputStream());
+                        File temp_dir = new File("src/main/resources/tmp");
+                        File temp = new File(temp_dir + "/"+ filename);
+                        temp.getParentFile().mkdirs();
+                        temp.createNewFile();
+                        BufferedOutputStream out =
+                                new BufferedOutputStream(new FileOutputStream(temp));
+
+                        int len = 0;
+                        while ((len = in.read(buffer)) > 0) {
+                            out.write(buffer, 0, len);
+                            System.out.print("#");
+                        }
+                        in.close();
+                        out.flush();
+                        out.close();
+                        socket.close();
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+            }
             if (GUI.item_panel == null) {
                 GUI.item_panel = new Item_panel(fitem, files);
             }

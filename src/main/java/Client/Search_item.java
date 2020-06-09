@@ -53,16 +53,17 @@ public class Search_item extends JPanel{
 
         number_label.setForeground(Color.white);
         number_label.setBackground(Color.DARK_GRAY);
+        number_label.setPreferredSize(new Dimension(50, 0));
         name.setForeground(Color.white);
         name.setBackground(Color.DARK_GRAY);
+        name.setPreferredSize(new Dimension(200, 0));
         type.setForeground(Color.white);
         type.setBackground(Color.DARK_GRAY);
+        type.setPreferredSize(new Dimension(338, 0));
 
         add(Box.createRigidArea(new Dimension(12, 0)));
         add(number_label);
-        add(Box.createHorizontalGlue());
         add(name);
-        add(Box.createHorizontalGlue());
         add(type);
         add(Box.createHorizontalGlue());
 

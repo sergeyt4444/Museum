@@ -8,13 +8,13 @@ import Users.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 
 public class Socket_manager extends Thread {
     public Socket socket;
@@ -56,6 +56,16 @@ public class Socket_manager extends Thread {
                         else {
                             output.writeUTF(json.toJson(user));
                         }
+                        break;
+                    }
+                    case "bans": {
+                        Gson json = new GsonBuilder().setPrettyPrinting().create();
+                        output.writeUTF(json.toJson(Server.m.getJoinedBans()));
+                        break;
+                    }
+                    case "delete_ban": {
+                        int BanID = input.read();
+                        Server.m.DeleteBan(BanID);
                         break;
                     }
                     case "search" : {
@@ -141,10 +151,48 @@ public class Socket_manager extends Thread {
                         ArrayList<File> files = Server.m.getMediabyIID(fullItem.id);
                         output.writeUTF(json.toJson(fullItem));
 
-//                        output.writeUTF(json.toJson(files));
+                        output.writeUTF(json.toJson(files));
 
                         break;
                     }
+                    case "load_file": {
+                        byte[] buffer = new byte[100*1024];
+
+                        String file_req = input.readUTF();
+                        BufferedInputStream in =
+                            new BufferedInputStream(
+                                    new FileInputStream(file_req));
+                        BufferedOutputStream out =
+                                new BufferedOutputStream(socket.getOutputStream());
+                        int len = 0;
+                        while ((len = in.read(buffer)) > 0) {
+                            out.write(buffer, 0, len);
+                            System.out.print("#");
+                        }
+                        in.close();
+                        out.flush();
+                        out.close();
+                        socket.close();
+                        works = 0;
+                        break;
+                    }
+//                    case "load_file": {
+//                        String file_req = input.readUTF();
+//
+//                        byte[] file_arr = new byte[4096];
+//                        FileInputStream fis = new FileInputStream(new File(file_req));
+//                        BufferedInputStream bis = new BufferedInputStream(fis);
+//                        DataInputStream file_dis = new DataInputStream(bis);
+//
+//                        int read;
+//                        while ((read = file_dis.read(file_arr)) != -1) {
+//                            output.write(file_arr, 0, read);
+//                            break;
+//                        }
+//                        output.flush();
+//                        socket.close();
+//                        break;
+//                    }
                     case "check_for_bans" : {
                         int user_id = input.read();
                         output.write(Server.m.CheckForBans(user_id));

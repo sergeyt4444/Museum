@@ -5,6 +5,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class Sign_in_panel extends JPanel {
 
@@ -12,7 +14,7 @@ public class Sign_in_panel extends JPanel {
     public static JLabel name_log_in_label;
     public static JLabel password_label;
     public static JTextField name_log_in_ta;
-    public static JTextField password_ta;
+    public static JPasswordField password_ta;
     public static JButton reg;
 
 
@@ -29,7 +31,7 @@ public class Sign_in_panel extends JPanel {
         name_log_in_ta = new JTextField("");
         name_log_in_label = new JLabel("Логин");
         password_label = new JLabel("Пароль");
-        password_ta = new JTextField("");
+        password_ta = new JPasswordField("");
         Font font = new Font("Times New Roman",Font.PLAIN, 16);
         Font bold = new Font("Times New Roman", Font.BOLD, 16);
         name_log_in_label.setBounds(40, 37, 80, 24);
@@ -52,6 +54,44 @@ public class Sign_in_panel extends JPanel {
         reg.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Client.register();
+            }
+        });
+        name_log_in_ta.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    Client.login(name_log_in_ta.getText(), password_ta.getText());
+                }
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+        password_ta.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    Client.login(name_log_in_ta.getText(), password_ta.getText());
+                }
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
             }
         });
         add(accept);

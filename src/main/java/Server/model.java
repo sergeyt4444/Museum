@@ -1,6 +1,7 @@
 package Server;
 
 import Bans.Ban;
+import Bans.JoinedBan;
 import Edits.Edit;
 import Items.FullItem;
 import Items.Item;
@@ -98,9 +99,13 @@ public class model {
         inf.InsertKeyword(iid, kword);
     }
 
+    public void InsertBan(Ban ban) {inf.InsertBan(ban);}
+
     public void DeleteKeyword(int ItemID, String kword) {
         inf.DeleteKeyword(ItemID, kword);
     }
+
+    public void DeleteBan(int BanID) {inf.DeleteBan(BanID);}
 
     public int UpdateItem(String itemName, String editType, String edit) {
         return inf.UpdateItem(itemName, editType, edit);
@@ -108,5 +113,9 @@ public class model {
 
     public void InsertEdit(int aid, String editText, int iid, String editRow, Date date) {
         inf.InsertEdit(aid, editText, iid, editRow, date);
+    }
+
+    public ArrayList<JoinedBan> getJoinedBans() {
+        return inf.getJoinedBans();
     }
 }

@@ -34,6 +34,7 @@ import java.awt.*;
             JFrame.add(new gui_test());
 
             JFrame.setVisible(true);
+            System.out.println(new JFileChooser().getFileSystemView().getDefaultDirectory().toString());
         }
     }
 

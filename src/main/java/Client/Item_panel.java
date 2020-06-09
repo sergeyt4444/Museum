@@ -252,10 +252,12 @@ public class Item_panel extends JPanel {
         scroll_panel.add(type_label);
         scroll_panel.add(keywords_label);
         scroll_panel.add(new JSeparator(SwingConstants.HORIZONTAL));
+        scroll_panel.add(Box.createRigidArea(new Dimension(0,12)));
         scroll_panel.add(keyword_main_panel);
         for (JPanel jp : keywords_panels) {
             keyword_main_panel.add(jp);
         }
+        scroll_panel.add(Box.createRigidArea(new Dimension(0,12)));
         scroll_panel.add(add_keyword);
         scroll_panel.add(Box.createRigidArea(new Dimension(0,12)));
         scroll_panel.add(new JSeparator(SwingConstants.HORIZONTAL));
@@ -498,15 +500,19 @@ public class Item_panel extends JPanel {
                 JLabel keyword_label = new JLabel(keyword);
                 keyword_label.setFont(font);
                 keyword_label.setForeground(Color.white);
+                keyword_label.setPreferredSize(new Dimension(200, 28));
 
                 JButton remove_keyword = new JButton("Удалить ключевое слово");
                 remove_keyword.setFont(font);
                 remove_keyword.setForeground(Color.white);
                 remove_keyword.setBackground(Color.DARK_GRAY);
+                remove_keyword.setPreferredSize(new Dimension(200,28));
 
+                jpanel.add(Box.createRigidArea(new Dimension(50,0)));
                 jpanel.add(keyword_label);
                 jpanel.add(Box.createRigidArea(new Dimension(24,0)));
                 jpanel.add(remove_keyword);
+                jpanel.add(Box.createHorizontalGlue());
 
                 keywords_panels.add(jpanel);
 
@@ -570,10 +576,12 @@ public class Item_panel extends JPanel {
         scroll_panel.add(type_label);
         scroll_panel.add(keywords_label);
         scroll_panel.add(new JSeparator(SwingConstants.HORIZONTAL));
+        scroll_panel.add(Box.createRigidArea(new Dimension(0,12)));
         scroll_panel.add(keyword_main_panel);
         for (JPanel jp : keywords_panels) {
             keyword_main_panel.add(jp);
         }
+        scroll_panel.add(Box.createRigidArea(new Dimension(0,12)));
         scroll_panel.add(add_keyword);
         scroll_panel.add(Box.createRigidArea(new Dimension(0,12)));
         scroll_panel.add(new JSeparator(SwingConstants.HORIZONTAL));
@@ -625,15 +633,19 @@ public class Item_panel extends JPanel {
             JLabel keyword_label = new JLabel(keyword);
             keyword_label.setFont(font);
             keyword_label.setForeground(Color.white);
+            keyword_label.setPreferredSize(new Dimension(200, 28));
 
             JButton remove_keyword = new JButton("Удалить ключевое слово");
             remove_keyword.setFont(font);
             remove_keyword.setForeground(Color.white);
             remove_keyword.setBackground(Color.DARK_GRAY);
+            remove_keyword.setPreferredSize(new Dimension(200, 28));
 
+            jpanel.add(Box.createRigidArea(new Dimension(50,0)));
             jpanel.add(keyword_label);
             jpanel.add(Box.createRigidArea(new Dimension(24,0)));
             jpanel.add(remove_keyword);
+            jpanel.add(Box.createHorizontalGlue());
 
             keywords_panels.add(jpanel);
 

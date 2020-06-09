@@ -1,4 +1,5 @@
 import Bans.Ban;
+import Bans.JoinedBan;
 import Edits.Edit;
 import Items.FullItem;
 import Items.Item;
@@ -25,6 +26,7 @@ public class server_test {
         ArrayList<Media> media_list = m.getMedia();
         ArrayList<FullItem> fullItems = m.getFullItems();
         ArrayList<Edit> edit_list = m.getEdits();
+        ArrayList<JoinedBan> jbans = m.getJoinedBans();
 
         Gson json = new GsonBuilder().setPrettyPrinting().create();
         String test = json.toJson(user_list);
@@ -40,6 +42,8 @@ public class server_test {
         test = json.toJson(fullItems);
         System.out.println(test);
         test = json.toJson(edit_list);
+        System.out.println(test);
+        test = json.toJson(jbans);
         System.out.println(test);
 
         User us = m.getUserbyLogPass("Admin", "Admin");

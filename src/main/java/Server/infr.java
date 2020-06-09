@@ -1,6 +1,7 @@
 package Server;
 
 import Bans.Ban;
+import Bans.JoinedBan;
 import Edits.Edit;
 import Items.FullItem;
 import Items.Item;
@@ -35,6 +36,7 @@ public class infr {
                 configuration.addAnnotatedClass(Keywords.class);
                 configuration.addAnnotatedClass(Media.class);
                 configuration.addAnnotatedClass(Edit.class);
+                configuration.addAnnotatedClass(JoinedBan.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
 
@@ -207,15 +209,30 @@ public class infr {
         session.save(edit);
         tx1.commit();
         session.close();
-
     }
 
+    public void InsertBan(Ban ban) {
+        Session session = sessionFactory.openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.save(ban);
+        tx1.commit();
+        session.close();
+    }
 
     public void DeleteKeyword(int itemID, String kword) {
         Query query = sessionFactory.openSession().createQuery("delete Keywords where Keyword = :word and ItemID = :iid");
         query.setParameter("word", kword);
         query.setParameter("iid", itemID);
         query.executeUpdate();
+    }
+
+    public void DeleteBan(int banID) {
+        Session session = sessionFactory.openSession();
+        Transaction tx1 = session.beginTransaction();
+        Ban ban = (Ban)session.load(Ban.class, banID);
+        session.delete(ban);
+        tx1.commit();
+        session.close();
 
     }
 
@@ -258,6 +275,13 @@ public class infr {
             return item.getId();
         }
         return -1;
+    }
+
+    public ArrayList<JoinedBan> getJoinedBans() {
+        List<JoinedBan> list = sessionFactory.openSession().createQuery("From JoinedBan").list();
+        ArrayList<JoinedBan> arr = new ArrayList<>(list.size());
+        arr.addAll(list);
+        return arr;
     }
 
 }
