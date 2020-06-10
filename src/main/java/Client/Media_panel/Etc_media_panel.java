@@ -1,6 +1,12 @@
 package Client.Media_panel;
 
 
+import Client.Client;
+import Client.GUI;
+import Client.Item_panel;
+import Client.Signed_in_panel;
+
+
 import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
@@ -10,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.util.Optional;
 
@@ -119,7 +126,19 @@ public class Etc_media_panel extends JPanel implements Abstract_Media_panel{
             delete.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    if(GUI.signed_in_panel == null) {
+                        JOptionPane.showMessageDialog(null, "Не хватает привелегий");
+                    }
+                    else {
+                        if (Signed_in_panel.user.getStatus().equals("Admin" ) || Signed_in_panel.user.getStatus().equals("Moderator")) {
+                            Client.delete_media(file);
+                            Item_panel.media_main_panel.remove(Etc_media_panel.this);
 
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(null, "Только пользователи с правами модератора и выше могут удалять файлы.");
+                        }
+                    }
                 }
             });
 

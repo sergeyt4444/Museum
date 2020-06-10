@@ -3,6 +3,7 @@ package Server;
 import Bans.Ban;
 import Bans.JoinedBan;
 import Edits.Edit;
+import Edits.JoinedEdit;
 import Items.FullItem;
 import Items.Item;
 import Items.Keywords;
@@ -21,12 +22,20 @@ public class model {
         return inf.getUsers();
     }
 
+    public ArrayList<User> getOnlyUsers() {
+        return inf.getOnlyUsers();
+    }
+
     public ArrayList<Ban> getBans() {
         return inf.getBans();
     }
 
     public ArrayList<Item> getItems() {
         return inf.getItems();
+    }
+
+    public Item getItembyID(int ItemID) {
+        return inf.getItembyID(ItemID);
     }
 
     public ArrayList<Keywords> getKeywords() {
@@ -107,6 +116,8 @@ public class model {
 
     public void DeleteBan(int BanID) {inf.DeleteBan(BanID);}
 
+    public void DeleteMedia(int iid, String file) {inf.DeleteMedia(iid, file);}
+
     public int UpdateItem(String itemName, String editType, String edit) {
         return inf.UpdateItem(itemName, editType, edit);
     }
@@ -115,7 +126,18 @@ public class model {
         inf.InsertEdit(aid, editText, iid, editRow, date);
     }
 
+    public void InsertMedia(String med_path, int iid) {
+        inf.InsertMedia(med_path, iid);
+    }
+
+    public void DeleteEdit(int EditID) {
+        inf.DeleteEdit(EditID);
+    }
+
     public ArrayList<JoinedBan> getJoinedBans() {
         return inf.getJoinedBans();
     }
+
+    public ArrayList<JoinedEdit> getJoinedEdits() { return inf.getJoinedEdits(); }
+
 }

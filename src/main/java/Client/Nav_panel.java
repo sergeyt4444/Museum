@@ -89,6 +89,38 @@ public class Nav_panel extends JPanel {
                 ipanel.ShowPanel();
             }
         });
+
+        visit_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Visitors_panel vpanel = new Visitors_panel();
+                vpanel.ShowPanel();
+            }
+        });
+
+        tours_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Tours_panel tours_panel = new Tours_panel();
+                tours_panel.ShowPanel();
+            }
+        });
+
+        exibitions_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Exhibitions_panel exhibitions_panel = new Exhibitions_panel();
+                exhibitions_panel.ShowPanel();
+            }
+        });
+
+        events_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Events_panel events_panel = new Events_panel();
+                events_panel.ShowPanel();
+            }
+        });
     }
 
 }

@@ -36,6 +36,12 @@ public class Admin_panel extends JPanel {
         changes_button = new JButton("Последние правки");
         changes_button.setFont(font);
         changes_button.setAlignmentX(CENTER_ALIGNMENT);
+        changes_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Client.edits();
+            }
+        });
         ban_history_button = new JButton("История банов");
         ban_history_button.setFont(font);
         ban_history_button.setAlignmentX(CENTER_ALIGNMENT);
@@ -48,6 +54,12 @@ public class Admin_panel extends JPanel {
         ban_button = new JButton("Забанить пользователя");
         ban_button.setFont(font);
         ban_button.setAlignmentX(CENTER_ALIGNMENT);
+        ban_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Client.ban_panel();
+            }
+        });
         add_object = new JButton("Добавить экспонат");
         add_object.setFont(font);
         add_object.setAlignmentX(CENTER_ALIGNMENT);

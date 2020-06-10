@@ -1,5 +1,6 @@
 package Server;
 
+import Bans.Ban;
 import Items.FullItem;
 import Items.Item;
 import Items.Keywords;
@@ -7,8 +8,10 @@ import Items.NShortItems;
 import Users.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Files;
@@ -66,6 +69,32 @@ public class Socket_manager extends Thread {
                     case "delete_ban": {
                         int BanID = input.read();
                         Server.m.DeleteBan(BanID);
+                        break;
+                    }
+                    case "users": {
+                        Gson json = new GsonBuilder().setPrettyPrinting().create();
+                        output.writeUTF(json.toJson(Server.m.getOnlyUsers()));
+                        break;
+                    }
+                    case "edits": {
+                        Gson json = new GsonBuilder().setPrettyPrinting().create();
+                        output.writeUTF(json.toJson(Server.m.getJoinedEdits()));
+                        break;
+                    }
+                    case "delete_edit": {
+                        int EditID = input.read();
+                        Server.m.DeleteEdit(EditID);
+                        Gson json = new GsonBuilder().setPrettyPrinting().create();
+                        output.writeUTF(json.toJson(Server.m.getJoinedEdits()));
+                        break;
+                    }
+                    case "create_ban": {
+                        Gson json = new GsonBuilder().setPrettyPrinting().create();
+                        Type type1 = new TypeToken<Ban>(){}.getType();
+                        String str = input.readUTF();
+                        Ban ban = json.fromJson(str, type1);
+                        Server.m.InsertBan(ban);
+
                         break;
                     }
                     case "search" : {
@@ -155,6 +184,15 @@ public class Socket_manager extends Thread {
 
                         break;
                     }
+                    case "delete_media": {
+                        String response = input.readUTF();
+                        int UserID = input.read();
+                        int ItemID = input.read();
+                        Server.m.DeleteMedia(ItemID, response);
+                        Date now = new Date();
+                        Server.m.InsertEdit(UserID, response+ " - deleted", ItemID, "Media", now);
+                        break;
+                    }
                     case "load_file": {
                         byte[] buffer = new byte[100*1024];
 
@@ -175,6 +213,39 @@ public class Socket_manager extends Thread {
                         socket.close();
                         works = 0;
                         break;
+                    }
+                    case "upload_file": {
+                        byte[] buffer = new byte[100*1024];
+                        String filename = input.readUTF();
+                        int uid = input.read();
+                        int iid = input.read();
+                        Item item = Server.m.getItembyID(iid);
+                        String item_name = item.getName();
+                        BufferedInputStream in =
+                                new BufferedInputStream(socket.getInputStream());
+                        File temp_dir = new File("src/main/resources/media");
+                        File temp = new File(temp_dir + "/" + item.getId() + "/"+ filename);
+                        System.out.println(temp.toString());
+                        temp.getParentFile().mkdirs();
+                        temp.createNewFile();
+                        Server.m.InsertMedia(temp.toString(), iid);
+                        Date now = new Date();
+                        Server.m.InsertEdit(uid, temp.toString() + " - added", iid, "Media", now);
+                        BufferedOutputStream out =
+                                new BufferedOutputStream(new FileOutputStream(temp));
+
+                        int len = 0;
+                        while ((len = in.read(buffer)) > 0) {
+                            out.write(buffer, 0, len);
+                            System.out.print("#");
+                        }
+                        in.close();
+                        out.flush();
+                        out.close();
+                        socket.close();
+                        works = 0;
+                        break;
+
                     }
 //                    case "load_file": {
 //                        String file_req = input.readUTF();

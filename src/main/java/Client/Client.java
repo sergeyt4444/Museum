@@ -1,6 +1,8 @@
 package Client;
 
+import Bans.Ban;
 import Bans.JoinedBan;
+import Edits.JoinedEdit;
 import Items.FullItem;
 import Items.Item;
 import Items.NShortItems;
@@ -16,10 +18,10 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.TimeZone;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -236,6 +238,79 @@ public class Client {
             }
             GUI.bans_view.Init(jbans);
             GUI.central_panel.add(GUI.bans_view);
+            jFrame.validate();
+            jFrame.repaint();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void create_ban(int UserID, int ModID, Date date, String reason) {
+        try {
+            output.writeUTF("create_ban");
+            Date now = new Date();
+            Ban ban = new Ban(UserID, now, date, ModID, reason);
+            Gson json = new GsonBuilder().setPrettyPrinting().create();
+            output.writeUTF(json.toJson(ban));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void ban_panel() {
+        try {
+            GUI.central_panel.removeAll();
+            output.writeUTF("users");
+            Gson json = new GsonBuilder().setPrettyPrinting().create();
+            String response = input.readUTF();
+            Type type1 = new TypeToken<ArrayList<User>>(){}.getType();
+            ArrayList<User> users = json.fromJson(response,type1);
+            if (GUI.ban_panel == null) {
+                GUI.ban_panel = new Ban_panel();
+            }
+            GUI.ban_panel.Init(users, Signed_in_panel.user.getId());
+            GUI.central_panel.add(GUI.ban_panel);
+            jFrame.validate();
+            jFrame.repaint();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void edits() {
+        try {
+            GUI.central_panel.removeAll();
+            output.writeUTF("edits");
+            Gson json = new GsonBuilder().setPrettyPrinting().create();
+            String response = input.readUTF();
+            Type type1 = new TypeToken<ArrayList<JoinedEdit>>(){}.getType();
+            ArrayList<JoinedEdit> jedits = json.fromJson(response, type1);
+            if (GUI.edit_view_panel == null) {
+                GUI.edit_view_panel = new Edit_view_panel();
+            }
+            GUI.edit_view_panel.Init(jedits);
+            GUI.central_panel.add(GUI.edit_view_panel);
+            jFrame.validate();
+            jFrame.repaint();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void delete_edit(int EditID) {
+        try {
+            output.writeUTF("delete_edit");
+            output.write(EditID);
+            Gson json = new GsonBuilder().setPrettyPrinting().create();
+            String response = input.readUTF();
+            Type type1 = new TypeToken<ArrayList<JoinedEdit>>(){}.getType();
+            ArrayList<JoinedEdit> jedits = json.fromJson(response, type1);
+            GUI.edit_view_panel.Init(jedits);
+
             jFrame.validate();
             jFrame.repaint();
         } catch (IOException e) {
@@ -476,6 +551,85 @@ public class Client {
             e.printStackTrace();
         }
 
+    }
+
+    public static void add_media() {
+        if (Signed_in_panel.user == null)
+            Signed_in_panel.user = new User();
+        if(Signed_in_panel.user.getStatus() == null)
+            Signed_in_panel.user.setStatus("");
+        if (Signed_in_panel.user.getStatus().equals("User")|| Signed_in_panel.user.getStatus().equals("Admin" )
+                || Signed_in_panel.user.getStatus().equals("Moderator") ) {
+            //send data to see bans
+            try {
+                output.writeUTF("check_for_bans");
+                output.write(Signed_in_panel.user.getId());
+                int banned = input.read();
+                if (banned == 0) {
+                    JFileChooser uploader = new JFileChooser();
+                    uploader.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+                    uploader.setDialogTitle("Upload file");
+
+                    int approved = uploader.showSaveDialog(null);
+                    if (approved == JFileChooser.APPROVE_OPTION) {
+                        String url = uploader.getSelectedFile().toString();
+                        byte[] buffer = new byte[100*1024];
+                        String adress = "127.0.0.1";
+                        InetAddress ip = null;
+                        Socket socket = null;
+                        DataOutputStream dos = null;
+                        ip = InetAddress.getByName(adress);
+
+                        socket = new Socket(ip, 4443);
+                        dos = new DataOutputStream(socket.getOutputStream());
+                        dos.writeUTF("upload_file");
+                        dos.writeUTF(new File(url).getName());
+                        dos.write(Signed_in_panel.user.getId());
+                        dos.write(Item_panel.item.id);
+
+                        BufferedInputStream in =
+                                new BufferedInputStream(
+                                        new FileInputStream(url));
+                        BufferedOutputStream out =
+                                new BufferedOutputStream(socket.getOutputStream());
+                        int len = 0;
+                        while ((len = in.read(buffer)) > 0) {
+                            out.write(buffer, 0, len);
+                            System.out.print("#");
+                        }
+                        in.close();
+                        out.flush();
+                        out.close();
+                        dos.close();
+                        socket.close();
+                    }
+                    view(Item_panel.item.id);
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Доступ заблокирован");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Только авторизированные пользователи могут вносить правки");
+        }
+
+    }
+
+    public static void delete_media(File file) {
+        try {
+            output.writeUTF("delete_media");
+            output.writeUTF(file.toString());
+            output.write(Signed_in_panel.user.getId());
+            output.write(Item_panel.item.id);
+            jFrame.validate();
+            jFrame.repaint();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void edit(FullItem item, String EditType) {

@@ -2,6 +2,10 @@ package Client.Media_panel;
 
 
 
+import Client.Client;
+import Client.GUI;
+import Client.Item_panel;
+import Client.Signed_in_panel;
 import org.apache.commons.io.FileUtils;
 import org.imgscalr.Scalr;
 
@@ -14,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
@@ -24,6 +29,7 @@ public class Image_media_panel extends JPanel implements Abstract_Media_panel{
     public JLabel filename_label;
     public JButton upload;
     public JButton delete;
+    public File file_orig;
     public File file_img;
     public BufferedImage full_img;
     public BufferedImage icon_img;
@@ -55,6 +61,11 @@ public class Image_media_panel extends JPanel implements Abstract_Media_panel{
         }
         icon_img = Scalr.resize(full_img, 100);
         filename = f.getName();
+    }
+
+    public void setFile(File file) {
+        file_orig = file;
+        filename = file.getName();
     }
 
     public Image_media_panel() {
@@ -136,6 +147,18 @@ public class Image_media_panel extends JPanel implements Abstract_Media_panel{
             delete.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    if(GUI.signed_in_panel == null) {
+                        JOptionPane.showMessageDialog(null, "Не хватает привелегий");
+                    }
+                    else {
+                        if (Signed_in_panel.user.getStatus().equals("Admin" ) || Signed_in_panel.user.getStatus().equals("Moderator")) {
+                            Client.delete_media(file_orig);
+                            Item_panel.media_main_panel.remove(Image_media_panel.this);
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(null, "Только пользователи с правами модератора и выше могут удалять файлы.");
+                        }
+                    }
 
                 }
             });

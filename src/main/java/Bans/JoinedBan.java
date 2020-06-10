@@ -25,8 +25,9 @@ public class JoinedBan {
     @Temporal(TemporalType.TIMESTAMP)
     private Date expired;
 
-    @Column (name = "moderator")
-    private String moderator;
+    @ManyToOne
+    @JoinColumn (name = "moderator")
+    private User moderator;
 
     @Column (name = "reason")
     private String reason;
@@ -36,7 +37,7 @@ public class JoinedBan {
         user = new User();
         received = new Date();
         expired = new Date();
-        moderator = "";
+        moderator = new User();
         reason = "";
     }
 
@@ -53,7 +54,7 @@ public class JoinedBan {
         return expired;
     }
 
-    public String getModerator() {
+    public User getModerator() {
         return moderator;
     }
 
@@ -74,7 +75,7 @@ public class JoinedBan {
         this.expired = expired;
     }
 
-    public void setModerator(String moderator) {
+    public void setModerator(User moderator) {
         this.moderator = moderator;
     }
 

@@ -3,6 +3,7 @@ package Server;
 import Bans.Ban;
 import Bans.JoinedBan;
 import Edits.Edit;
+import Edits.JoinedEdit;
 import Items.FullItem;
 import Items.Item;
 import Items.Keywords;
@@ -12,8 +13,10 @@ import org.hibernate.*;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +40,7 @@ public class infr {
                 configuration.addAnnotatedClass(Media.class);
                 configuration.addAnnotatedClass(Edit.class);
                 configuration.addAnnotatedClass(JoinedBan.class);
+                configuration.addAnnotatedClass(JoinedEdit.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
 
@@ -55,12 +59,25 @@ public class infr {
         return arr;
     }
 
+    public ArrayList<User> getOnlyUsers() {
+        List<User> list = sessionFactory.openSession().createQuery("From User where status = 'User'").list();
+        ArrayList<User> arr = new ArrayList<>(list.size());
+        arr.addAll(list);
+        return arr;
+    }
 
     public ArrayList<Item> getItems() {
         List<Item> list = sessionFactory.openSession().createQuery("From Item").list();
         ArrayList<Item> arr = new ArrayList<>(list.size());
         arr.addAll(list);
         return arr;
+    }
+
+    public Item getItembyID(int ItemID) {
+        Session session = sessionFactory.openSession();
+        Item item = (Item) session.get(Item.class, ItemID);
+        session.close();
+        return item;
     }
 
     public ArrayList<Keywords> getKeywords() {
@@ -211,6 +228,120 @@ public class infr {
         session.close();
     }
 
+    public void InsertMedia(String med_path, int iid) {
+        Media media = new Media(med_path, iid);
+        Session session = sessionFactory.openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.save(media);
+        tx1.commit();
+        session.close();
+    }
+
+    public void DeleteEdit(int EditID) {
+        Session session = sessionFactory.openSession();
+        Transaction tx1 = session.beginTransaction();
+        Edit edit = (Edit)session.get(Edit.class, EditID);
+        tx1.commit();
+        if (edit.getEditrow().equals("Keyword")) {
+
+        }
+        else
+            if (edit.getEditrow().equals("Media")) {
+                String edit_string = edit.getEdit();
+                int separator = edit_string.lastIndexOf(" - added");
+                if (separator != -1) {
+                    String edit_body = edit_string.substring(0,separator);
+                    Server.m.DeleteMedia(edit.getItemID(), edit_body);
+                    Transaction tx2 = session.beginTransaction();
+                    session.delete(edit);
+                    tx2.commit();
+                }
+                else {
+                    separator = edit_string.lastIndexOf(" - deleted");
+                    if (separator != -1) {
+                        String edit_body = edit_string.substring(0,separator);
+                        File file = new File(edit_body);
+                        if (file.isFile() == true) {
+                            Server.m.InsertMedia(edit_body, edit.getItemID());
+                            Transaction tx2 = session.beginTransaction();
+                            session.delete(edit);
+                            tx2.commit();
+                        }
+
+                    }
+                }
+
+        }
+            else {
+                Query query = session.createQuery("From Edit where ItemID = :iid and EditRow = :erow and EditDate >= :edate");
+                query.setParameter("iid", edit.getItemID());
+                query.setParameter("erow", edit.getEditrow());
+                query.setParameter("edate", edit.getEditDate());
+                List<Edit> list = query.list();
+                for (Edit edit1: list) {
+                    Transaction tx2 = session.beginTransaction();
+                    session.delete(edit1);
+                    tx2.commit();
+                }
+                Transaction tx3 = session.beginTransaction();
+                Item edited_item = (Item) session.get(Item.class, edit.getItemID());
+                tx3.commit();
+                Edit recent = (Edit) session.createCriteria(Edit.class)
+                        .add(Restrictions.eq("Editrow", edit.getEditrow()))
+                        .add(Restrictions.eq("ItemID", edit.getItemID()))
+                        .addOrder(Order.desc("EditDate"))
+                        .setMaxResults(1)
+                        .uniqueResult();
+                switch (edit.getEditrow()) {
+                    case "Parameters": {
+                        if (recent == null) {
+                            edited_item.setParameters("");
+                        }
+                        else {
+                            edited_item.setParameters(recent.getEdit());
+                        }
+                        break;
+                    }
+                    case "Lib": {
+                        if (recent == null) {
+                            edited_item.setLib("");
+                        }
+                        else {
+                            edited_item.setLib(recent.getEdit());
+                        }
+                        break;
+                    }
+                    case "Links": {
+                        if (recent == null) {
+                            edited_item.setLinks("");
+                        }
+                        else {
+                            edited_item.setLinks(recent.getEdit());
+                        }
+                        break;
+                    }
+                    case "Annotation": {
+                        if (recent == null) {
+                            edited_item.setAnnotation("");
+                        }
+                        else {
+                            edited_item.setAnnotation(recent.getEdit());
+                        }
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+                Transaction tx4 = session.beginTransaction();
+                session.update(edited_item);
+                tx4.commit();
+        }
+
+        session.close();
+
+    }
+
     public void InsertBan(Ban ban) {
         Session session = sessionFactory.openSession();
         Transaction tx1 = session.beginTransaction();
@@ -233,7 +364,20 @@ public class infr {
         session.delete(ban);
         tx1.commit();
         session.close();
+    }
 
+    public void DeleteMedia(int iid, String file) {
+        Query query = sessionFactory.openSession().createQuery("From Media where item_id = :iid and media_path = :file");
+        query.setParameter("iid", iid);
+        query.setParameter("file", file);
+        if (!(query.list().isEmpty())) {
+            Media media = (Media) query.list().get(0);
+            Session session = sessionFactory.openSession();
+            Transaction tx1 = session.beginTransaction();
+            session.delete(media);
+            tx1.commit();
+            session.close();
+        }
     }
 
     public int UpdateItem(String itemName, String editType, String edit) {
@@ -280,6 +424,13 @@ public class infr {
     public ArrayList<JoinedBan> getJoinedBans() {
         List<JoinedBan> list = sessionFactory.openSession().createQuery("From JoinedBan").list();
         ArrayList<JoinedBan> arr = new ArrayList<>(list.size());
+        arr.addAll(list);
+        return arr;
+    }
+
+    public ArrayList<JoinedEdit> getJoinedEdits() {
+        List<JoinedEdit> list = sessionFactory.openSession().createQuery("From JoinedEdit").list();
+        ArrayList<JoinedEdit> arr = new ArrayList<>(list.size());
         arr.addAll(list);
         return arr;
     }

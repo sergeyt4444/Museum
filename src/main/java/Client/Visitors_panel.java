@@ -4,21 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 
-public class Info_panel extends JPanel {
+public class Visitors_panel extends JPanel {
 
     public JLabel header_label;
     public JTextArea textarea;
     public JFrame frame;
     public JScrollPane scrollpane;
 
-    public Info_panel() {
+    public Visitors_panel() {
         setBackground(Color.darkGray);
         setBorder(BorderFactory.createLineBorder(Color.white, 2));
         setLayout(null);
         Font header = new Font("Times New Roman",Font.PLAIN, 32);
         Font font = new Font("Times New Roman",Font.PLAIN, 20);
 
-        header_label = new JLabel("О музее");
+        header_label = new JLabel("Посетителям");
         header_label.setFont(header);
         header_label.setForeground(Color.white);
         header_label.setBounds(240, 50, 800, 200);
@@ -35,7 +35,7 @@ public class Info_panel extends JPanel {
 //        char[] txt = new char[1000];
         String txt = "";
         try {
-            Reader filereader = new FileReader(new File((getClass().getResource("/About.txt")).getPath()));
+            Reader filereader = new FileReader(new File((getClass().getResource("/Visitors.txt")).getPath()));
             int ch;
             while ((ch = filereader.read()) != -1) {
                 txt += (char)ch;
@@ -62,7 +62,7 @@ public class Info_panel extends JPanel {
     }
 
     public void ShowPanel() {
-        frame = new JFrame("О музее");
+        frame = new JFrame("Посетителям");
         frame.setSize(1280, 1024);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.add(this);

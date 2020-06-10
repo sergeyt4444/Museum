@@ -23,7 +23,7 @@ public class Ban {
     private Date expired;
 
     @Column (name = "moderator")
-    private String moderator;
+    private int moderator;
 
     @Column (name = "reason")
     private String reason;
@@ -32,7 +32,7 @@ public class Ban {
 
     }
 
-    public Ban(int uid, Date rec, Date exp, String mod, String reasn) {
+    public Ban(int uid, Date rec, Date exp, int mod, String reasn) {
         UserID = uid;
         received = rec;
         expired = exp;
@@ -53,7 +53,7 @@ public class Ban {
         return expired;
     }
 
-    public String getModerator() {
+    public int getModerator() {
         return moderator;
     }
 
@@ -74,7 +74,7 @@ public class Ban {
         this.expired = expired;
     }
 
-    public void setModerator(String moderator) {
+    public void setModerator(int moderator) {
         this.moderator = moderator;
     }
 

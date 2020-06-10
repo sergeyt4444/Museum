@@ -32,9 +32,11 @@ public class Edit_panel extends JPanel {
         name_label = new JLabel(Name);
         name_label.setFont(header_font);
         name_label.setForeground(Color.white);
+        name_label.setAlignmentX(CENTER_ALIGNMENT);
         type_label = new JLabel(Type);
         type_label.setFont(header_font);
         type_label.setForeground(Color.white);
+        type_label.setAlignmentX(CENTER_ALIGNMENT);
         edit_ta = new JTextArea(Placeholder);
         edit_ta.setFont(font);
         edit_ta.setBackground(Color.DARK_GRAY);
@@ -54,15 +56,15 @@ public class Edit_panel extends JPanel {
         buttons_panel.add(confirm);
         buttons_panel.add(cancel);
         edit_ta.setDocument(new JTextLengthLimit(10));
-        name_label.setAlignmentX(CENTER_ALIGNMENT);
-        type_label.setAlignmentX(0.2f);
-        edit_ta.setAlignmentX(0.2f);
-        buttons_panel.setAlignmentX(0.2f);
+        edit_ta.setAlignmentX(CENTER_ALIGNMENT);
+        buttons_panel.setAlignmentX(CENTER_ALIGNMENT);
 
         confirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Client.commit_edit(Name, Type, edit_ta.getText());
+                if (!(edit_ta.getText().equals(Placeholder))) {
+                    Client.commit_edit(Name, Type, edit_ta.getText());
+                }
             }
         });
 
@@ -89,9 +91,11 @@ public class Edit_panel extends JPanel {
         name_label = new JLabel();
         name_label.setFont(header_font);
         name_label.setForeground(Color.white);
+        name_label.setAlignmentX(CENTER_ALIGNMENT);
         type_label = new JLabel();
         type_label.setFont(header_font);
         type_label.setForeground(Color.white);
+        type_label.setAlignmentX(CENTER_ALIGNMENT);
         edit_ta = new JTextArea();
         edit_ta.setFont(font);
         edit_ta.setBackground(Color.DARK_GRAY);
@@ -113,15 +117,15 @@ public class Edit_panel extends JPanel {
         buttons_panel.add(confirm);
         buttons_panel.add(cancel);
         edit_ta.setDocument(new JTextLengthLimit(500));
-        name_label.setAlignmentX(CENTER_ALIGNMENT);
-        type_label.setAlignmentX(0.2f);
-        edit_ta.setAlignmentX(0.2f);
-        buttons_panel.setAlignmentX(0.2f);
+        edit_ta.setAlignmentX(CENTER_ALIGNMENT);
+        buttons_panel.setAlignmentX(CENTER_ALIGNMENT);
 
         confirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Client.commit_edit(Name, Type, edit_ta.getText());
+                if (!(edit_ta.getText().equals(Placeholder))) {
+                    Client.commit_edit(Name, Type, edit_ta.getText());
+                }
             }
         });
 

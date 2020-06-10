@@ -25,6 +25,8 @@ public class GUI extends JPanel {
     public static Moderator_panel moderator_panel;
     public static Admin_panel admin_panel;
     public static Bans_view_panel bans_view;
+    public static Ban_panel ban_panel;
+    public static Edit_view_panel edit_view_panel;
 
 
     public GUI() {
@@ -76,6 +78,7 @@ public class GUI extends JPanel {
     public static void main(String[] args) {
         JFrame = new JFrame("Собрание экспонатов музея");
         JFrame.setSize(1280, 1024);
+        JFrame.setResizable(false);
         JFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         JFrame.add(new GUI());
 

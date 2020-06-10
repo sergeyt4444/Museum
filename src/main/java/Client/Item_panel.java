@@ -233,7 +233,7 @@ public class Item_panel extends JPanel {
         add_media.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Client.add_media();
             }
         });
 
@@ -476,7 +476,7 @@ public class Item_panel extends JPanel {
         add_media.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Client.add_media();
             }
         });
 
@@ -545,6 +545,7 @@ public class Item_panel extends JPanel {
                     }
                     case "bmp": {
                         Image_media_panel imd = new Image_media_panel();
+                        imd.setFile(file);
                         imd.setImage(file);
                         imd.Init();
                         media_main_panel.add(imd);
@@ -680,6 +681,7 @@ public class Item_panel extends JPanel {
                     }
                     case "bmp": {
                         Image_media_panel imd = new Image_media_panel();
+                        imd.setFile(file);
                         imd.setImage(file);
                         imd.Init();
                         media_main_panel.add(imd);

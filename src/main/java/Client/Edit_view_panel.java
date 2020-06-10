@@ -1,6 +1,6 @@
 package Client;
 
-import Bans.JoinedBan;
+import Edits.JoinedEdit;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,23 +8,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class Bans_view_panel extends JPanel {
-    public int bnum;
-    ArrayList<JoinedBan> ban_arr;
+public class Edit_view_panel extends JPanel{
 
-    public Bans_view_panel() {
+    ArrayList<JoinedEdit> edit_arr;
+
+    public Edit_view_panel() {
         setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         setBackground(Color.DARK_GRAY);
         setBorder(BorderFactory.createLineBorder(Color.white, 2));
         setPreferredSize(new Dimension(600, 600));
-
     }
 
-    public void Init(ArrayList<JoinedBan> bans) {
+    public void Init(ArrayList<JoinedEdit> edits) {
         removeAll();
-        ban_arr = bans;
         Font font = new Font("Times New Roman", Font.PLAIN, 16);
-        bnum = bans.size();
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new GridBagLayout());
         jPanel.setBackground(Color.DARK_GRAY);
@@ -36,7 +33,6 @@ public class Bans_view_panel extends JPanel {
         jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-
         JTextField id_header = new JTextField("ID");
         id_header.setFont(font);
         id_header.setEditable(false);
@@ -46,7 +42,7 @@ public class Bans_view_panel extends JPanel {
         c.gridx = 0;
         c.gridy = 0;
         jPanel.add(id_header, c);
-        JTextField user_header = new JTextField("Пользователь");
+        JTextField user_header = new JTextField("Автор");
         user_header.setFont(font);
         user_header.setEditable(false);
         user_header.setHorizontalAlignment(SwingConstants.CENTER);
@@ -55,16 +51,16 @@ public class Bans_view_panel extends JPanel {
         c.gridx = 1;
         c.gridy = 0;
         jPanel.add(user_header,c);
-        JTextField rec_header = new JTextField("Получен");
-        rec_header.setFont(font);
-        rec_header.setEditable(false);
-        rec_header.setHorizontalAlignment(SwingConstants.CENTER);
+        JTextField edit_header = new JTextField("Содержание изменения");
+        edit_header.setFont(font);
+        edit_header.setEditable(false);
+        edit_header.setHorizontalAlignment(SwingConstants.CENTER);
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
         c.gridx = 2;
         c.gridy = 0;
-        jPanel.add(rec_header,c);
-        JTextField exp_header = new JTextField("Закончится");
+        jPanel.add(edit_header,c);
+        JTextField exp_header = new JTextField("Экспонат");
         exp_header.setFont(font);
         exp_header.setEditable(false);
         exp_header.setHorizontalAlignment(SwingConstants.CENTER);
@@ -73,25 +69,25 @@ public class Bans_view_panel extends JPanel {
         c.gridx = 3;
         c.gridy = 0;
         jPanel.add(exp_header,c);
-        JTextField mod_header = new JTextField("Модератор");
-        mod_header.setFont(font);
-        mod_header.setEditable(false);
-        mod_header.setHorizontalAlignment(SwingConstants.CENTER);
+        JTextField edittype_header = new JTextField("Измененное поле");
+        edittype_header.setFont(font);
+        edittype_header.setEditable(false);
+        edittype_header.setHorizontalAlignment(SwingConstants.CENTER);
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
         c.gridx = 4;
         c.gridy = 0;
-        jPanel.add(mod_header, c);
-        JTextField reason_header = new JTextField("Причина");
-        reason_header.setFont(font);
-        reason_header.setEditable(false);
-        reason_header.setHorizontalAlignment(SwingConstants.CENTER);
+        jPanel.add(edittype_header, c);
+        JTextField date_header = new JTextField("Дата");
+        date_header.setFont(font);
+        date_header.setEditable(false);
+        date_header.setHorizontalAlignment(SwingConstants.CENTER);
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
         c.gridx = 5;
         c.gridy = 0;
-        jPanel.add(reason_header,c);
-        JTextField button_header = new JTextField("Удаление");
+        jPanel.add(date_header,c);
+        JTextField button_header = new JTextField("Отмена");
         button_header.setEditable(false);
         button_header.setHorizontalAlignment(SwingConstants.CENTER);
         c.fill = GridBagConstraints.BOTH;
@@ -100,9 +96,9 @@ public class Bans_view_panel extends JPanel {
         c.gridy = 0;
         jPanel.add(button_header, c);
         int i = 0;
-        for (JoinedBan ban: bans) {
+        for (JoinedEdit edit: edits) {
             i++;
-            JTextField id_field = new JTextField(Integer.toString(ban.getId()));
+            JTextField id_field = new JTextField(Integer.toString(edit.getId()));
             id_field.setFont(font);
             id_field.setEditable(false);
             id_field.setHorizontalAlignment(SwingConstants.CENTER);
@@ -111,7 +107,7 @@ public class Bans_view_panel extends JPanel {
             c.gridx = 0;
             c.gridy = i;
             jPanel.add(id_field,c);
-            JTextField user_field = new JTextField(ban.getUser().getLogin());
+            JTextField user_field = new JTextField(edit.getAuthor().getLogin());
             user_field.setFont(font);
             user_field.setEditable(false);
             user_field.setHorizontalAlignment(SwingConstants.CENTER);
@@ -120,16 +116,16 @@ public class Bans_view_panel extends JPanel {
             c.gridx = 1;
             c.gridy = i;
             jPanel.add(user_field,c);
-            JTextField rec_field = new JTextField(ban.getRecieved().toString());
-            rec_field.setFont(font);
-            rec_field.setEditable(false);
-            rec_field.setHorizontalAlignment(SwingConstants.CENTER);
+            JTextField edit_field = new JTextField(edit.getEdit());
+            edit_field.setFont(font);
+            edit_field.setEditable(false);
+            edit_field.setHorizontalAlignment(SwingConstants.CENTER);
             c.fill = GridBagConstraints.BOTH;
             c.anchor = GridBagConstraints.CENTER;
             c.gridx = 2;
             c.gridy = i;
-            jPanel.add(rec_field,c);
-            JTextField exp_field = new JTextField(ban.getExpired().toString());
+            jPanel.add(edit_field,c);
+            JTextField exp_field = new JTextField(edit.getItem().getName());
             exp_field.setFont(font);
             exp_field.setEditable(false);
             exp_field.setHorizontalAlignment(SwingConstants.CENTER);
@@ -138,35 +134,33 @@ public class Bans_view_panel extends JPanel {
             c.gridx = 3;
             c.gridy = i;
             jPanel.add(exp_field,c);
-            JTextField mod_field = new JTextField(ban.getModerator().getLogin());
-            mod_field.setFont(font);
-            mod_field.setEditable(false);
-            mod_field.setHorizontalAlignment(SwingConstants.CENTER);
+            JTextField edittype_field = new JTextField(edit.getEditrow());
+            edittype_field.setFont(font);
+            edittype_field.setEditable(false);
+            edittype_field.setHorizontalAlignment(SwingConstants.CENTER);
             c.fill = GridBagConstraints.BOTH;
             c.anchor = GridBagConstraints.CENTER;
             c.gridx = 4;
             c.gridy = i;
-            jPanel.add(mod_field, c);
-            JTextField reason_field = new JTextField(ban.getReason());
-            reason_field.setFont(font);
-            reason_field.setEditable(false);
-            reason_field.setHorizontalAlignment(SwingConstants.CENTER);
+            jPanel.add(edittype_field, c);
+            JTextField date_field = new JTextField(edit.getEditDate().toString());
+            date_field.setFont(font);
+            date_field.setEditable(false);
+            date_field.setHorizontalAlignment(SwingConstants.CENTER);
             c.fill = GridBagConstraints.BOTH;
             c.anchor = GridBagConstraints.CENTER;
             c.gridx = 5;
             c.gridy = i;
-            jPanel.add(reason_field, c);
-            JButton remove = new JButton("Отменить бан");
+            jPanel.add(date_field, c);
+            JButton remove = new JButton("Отменить");
             remove.setFont(font);
             remove.setHorizontalAlignment(SwingConstants.CENTER);
             remove.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    //delete ban
-                    bans.remove(ban);
-                    Init(bans);
-                    Client.delete_ban(ban.getId());
-                    System.out.println("Delete ban, ban id: " + ban.getId());
+                    //delete edit
+                    Client.delete_edit(edit.getId());
+                    System.out.println("Delete edit, edit id: " + edit.getId());
                 }
             });
             c.gridx = 6;
@@ -180,6 +174,7 @@ public class Bans_view_panel extends JPanel {
         JPanel jPanel1 = new JPanel();
         jPanel.add(jPanel1, c);
         add(jScrollPane);
+
     }
 
 }
