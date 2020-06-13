@@ -226,6 +226,7 @@ public class Item_panel extends JPanel {
         media_main_panel.setBackground(Color.DARK_GRAY);
         media_main_panel.setBorder(BorderFactory.createEmptyBorder());
         media_main_panel.setLayout(new BoxLayout(media_main_panel, BoxLayout.PAGE_AXIS));
+        media_main_panel.setMaximumSize(new Dimension(600, 200));
 
         media_panels = new ArrayList<>();
 
@@ -469,6 +470,7 @@ public class Item_panel extends JPanel {
         media_main_panel.setBackground(Color.DARK_GRAY);
         media_main_panel.setBorder(BorderFactory.createEmptyBorder());
         media_main_panel.setLayout(new BoxLayout(media_main_panel, BoxLayout.PAGE_AXIS));
+        media_main_panel.setMaximumSize(new Dimension(600, 200));
 
         media_panels = new ArrayList<>();
 

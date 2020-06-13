@@ -34,6 +34,7 @@ public class Etc_media_panel extends JPanel implements Abstract_Media_panel{
         setBackground(Color.darkGray);
         setBorder(BorderFactory.createLineBorder(Color.white, 2));
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        setMaximumSize(new Dimension(600, 200));
         try {
             setImage(ImageIO.read(getClass().getResource("/EtcIcon.png")));
         } catch (IOException e) {

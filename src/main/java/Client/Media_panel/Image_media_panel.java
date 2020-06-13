@@ -72,8 +72,8 @@ public class Image_media_panel extends JPanel implements Abstract_Media_panel{
         setBackground(Color.darkGray);
         setBorder(BorderFactory.createLineBorder(Color.white, 2));
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        setMaximumSize(new Dimension(600, 200));
         filename = "";
-
     }
 
     public void Init() {
@@ -93,7 +93,10 @@ public class Image_media_panel extends JPanel implements Abstract_Media_panel{
                     frame.setMinimumSize(new Dimension(100, 100));
                     JLabel label = new JLabel();
                     label.setIcon(new ImageIcon(full_img));
-                    frame.add(label);
+                    JScrollPane scrollPane = new JScrollPane(label);
+                    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                    frame.add(scrollPane);
 
                     frame.setVisible(true);
 
@@ -108,6 +111,7 @@ public class Image_media_panel extends JPanel implements Abstract_Media_panel{
             filename_label.setFont(font);
             filename_label.setBackground(Color.DARK_GRAY);
             filename_label.setForeground(Color.white);
+            filename_label.setMaximumSize(new Dimension(300, 50));
 
             upload = new JButton("Скачать");
             upload.setFont(font);

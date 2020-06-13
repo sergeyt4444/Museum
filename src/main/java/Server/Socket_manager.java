@@ -205,7 +205,6 @@ public class Socket_manager extends Thread {
                         int len = 0;
                         while ((len = in.read(buffer)) > 0) {
                             out.write(buffer, 0, len);
-                            System.out.print("#");
                         }
                         in.close();
                         out.flush();
