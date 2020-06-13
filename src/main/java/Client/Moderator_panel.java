@@ -7,11 +7,11 @@ import java.awt.event.ActionListener;
 
 public class Moderator_panel extends JPanel {
 
-    public static JLabel header_label;
-    public static JPanel container;
-    public static JButton changes_button;
-    public static JButton ban_history_button;
-    public static JButton ban_button;
+    public JLabel header_label;
+    public JPanel container;
+    public JButton changes_button;
+    public JButton ban_history_button;
+    public JButton ban_button;
 
     public Moderator_panel() {
         setBackground(Color.orange);

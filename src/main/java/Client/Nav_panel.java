@@ -8,12 +8,12 @@ import java.awt.event.ActionListener;
 
 public class Nav_panel extends JPanel {
 
-    public static JButton main_button;
-    public static JButton info_button;
-    public static JButton visit_button;
-    public static JButton tours_button;
-    public static JButton exibitions_button;
-    public static JButton events_button;
+    public JButton main_button;
+    public JButton info_button;
+    public JButton visit_button;
+    public JButton tours_button;
+    public JButton exibitions_button;
+    public JButton events_button;
 
     public Nav_panel() {
         setBackground(Color.darkGray);

@@ -9,9 +9,9 @@ import java.awt.event.ActionListener;
 
 public class Signed_in_panel extends JPanel {
 
-    public static JLabel login_label;
-    public static JLabel status_label;
-    public static JButton quit;
+    public JLabel login_label;
+    public JLabel status_label;
+    public JButton quit;
     public static User user;
 
     public Signed_in_panel() {

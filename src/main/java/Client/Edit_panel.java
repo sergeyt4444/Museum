@@ -9,15 +9,15 @@ import java.awt.event.ActionListener;
 
 public class Edit_panel extends JPanel {
 
-    public static JLabel name_label;
-    public static JLabel type_label;
-    public static JTextArea edit_ta;
-    public static JPanel buttons_panel;
-    public static JButton confirm;
-    public static JButton cancel;
-    public static String Name;
-    public static String Type;
-    public static String Placeholder;
+    public JLabel name_label;
+    public JLabel type_label;
+    public JTextArea edit_ta;
+    public JPanel buttons_panel;
+    public JButton confirm;
+    public JButton cancel;
+    public String Name;
+    public String Type;
+    public String Placeholder;
 
     public Edit_panel() {
         Name = "Placeholder name";

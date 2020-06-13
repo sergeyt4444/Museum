@@ -8,10 +8,10 @@ import java.awt.event.ActionListener;
 
 public class Search_Nav_Panel extends JPanel {
 
-    public static JButton first;
-    public static JButton prev;
-    public static JButton next;
-    public static JButton last;
+    public JButton first;
+    public JButton prev;
+    public JButton next;
+    public JButton last;
     public static JLabel page;
 
 

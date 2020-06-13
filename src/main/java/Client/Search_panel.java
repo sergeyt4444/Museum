@@ -9,15 +9,15 @@ import java.awt.event.KeyListener;
 
 public class Search_panel extends JPanel {
 
-    public static JButton search;
-    public static JTextField search_ta;
-    public static JLabel search_label;
-//    public static JLabel sort_label;
-//    public static JComboBox sort_cbox;
-    public static JRadioButton rb1;
-    public static JRadioButton rb2;
-    public static JRadioButton rb3;
-    public static ButtonGroup group;
+    public JButton search;
+    public JTextField search_ta;
+    public JLabel search_label;
+//    public JLabel sort_label;
+//    public JComboBox sort_cbox;
+    public JRadioButton rb1;
+    public JRadioButton rb2;
+    public JRadioButton rb3;
+    public ButtonGroup group;
 
 
     public Search_panel() {

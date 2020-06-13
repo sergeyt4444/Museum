@@ -125,7 +125,7 @@ public class Client {
         GUI.central_panel.removeAll();
         GUI.central_panel.add(GUI.header);
         GUI.central_panel.add(Box.createRigidArea(new Dimension(0, 100)));
-        Search_panel.search_ta.setText("");
+        GUI.search_panel.search_ta.setText("");
         GUI.central_panel.add(GUI.search_panel);
         GUI.central_panel.add(Box.createRigidArea(new Dimension(0, 270)));
         jFrame.repaint();
@@ -701,33 +701,33 @@ public class Client {
                 if (type != null) {
                     switch (type) {
                         case "Тип": {
-                            Item_panel.item.Type = edit;
-                            Item_panel.type_label.setText("Тип: " + edit);
+                            GUI.item_panel.item.Type = edit;
+                            GUI.item_panel.type_label.setText("Тип: " + edit);
                             break;
                         }
                         case "Название": {
-                            Item_panel.item.Name = edit;
-                            Item_panel.name_label.setText(edit);
+                            GUI.item_panel.item.Name = edit;
+                            GUI.item_panel.name_label.setText(edit);
                             break;
                         }
                         case "Технические параметры": {
-                            Item_panel.item.Parameters = edit;
-                            Item_panel.param_textarea.setText(edit);
+                            GUI.item_panel.item.Parameters = edit;
+                            GUI.item_panel.param_textarea.setText(edit);
                             break;
                         }
                         case "Литература": {
-                            Item_panel.item.Lib = edit;
-                            Item_panel.lib_textarea.setText(edit);
+                            GUI.item_panel.item.Lib = edit;
+                            GUI.item_panel.lib_textarea.setText(edit);
                             break;
                         }
                         case "Ссылки": {
-                            Item_panel.item.Links = edit;
-                            Item_panel.links_textarea.setText(edit);
+                            GUI.item_panel.item.Links = edit;
+                            GUI.item_panel.links_textarea.setText(edit);
                             break;
                         }
                         case "Описание": {
-                            Item_panel.item.Annotation = edit;
-                            Item_panel.ann_textarea.setText(edit);
+                            GUI.item_panel.item.Annotation = edit;
+                            GUI.item_panel.ann_textarea.setText(edit);
                             break;
                         }
                         default: {

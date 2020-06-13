@@ -7,14 +7,14 @@ import java.awt.event.ActionListener;
 
 public class Admin_panel extends JPanel {
 
-    public static JLabel header_label;
-    public static JPanel container;
-    public static JButton changes_button;
-    public static JButton ban_history_button;
-    public static JButton ban_button;
-    public static JButton moderators;
-    public static JButton add_object;
-    public static JButton delete_object;
+    public JLabel header_label;
+    public JPanel container;
+    public JButton changes_button;
+    public JButton ban_history_button;
+    public JButton ban_button;
+    public JButton moderators;
+    public JButton add_object;
+    public JButton delete_object;
 
     public Admin_panel() {
         setBackground(Color.orange);

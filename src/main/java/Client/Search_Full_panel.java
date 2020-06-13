@@ -8,8 +8,8 @@ import java.awt.*;
 public class Search_Full_panel extends JPanel {
 
 //    public static Search_panel search_panel;
-    public static Search_page search_page;
-    public static Search_Nav_Panel search_nav_panel;
+    public Search_page search_page;
+    public Search_Nav_Panel search_nav_panel;
 
     public  Search_Full_panel() {
         setBackground(Color.darkGray);

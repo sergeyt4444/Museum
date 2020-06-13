@@ -10,12 +10,12 @@ import java.awt.event.KeyListener;
 
 public class Sign_in_panel extends JPanel {
 
-    public static JButton accept;
-    public static JLabel name_log_in_label;
-    public static JLabel password_label;
-    public static JTextField name_log_in_ta;
-    public static JPasswordField password_ta;
-    public static JButton reg;
+    public JButton accept;
+    public JLabel name_log_in_label;
+    public JLabel password_label;
+    public JTextField name_log_in_ta;
+    public JPasswordField password_ta;
+    public JButton reg;
 
 
     public void clear() {

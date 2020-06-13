@@ -9,14 +9,14 @@ import java.awt.event.KeyListener;
 
 public class Register_panel extends JPanel {
 
-    public static JLabel login_label;
-    public static JLabel pass1_label;
-    public static JLabel pass2_label;
-    public static JTextField login_ta;
-    public static JPasswordField pass1_ta;
-    public static JPasswordField pass2_ta;
-    public static JButton submit;
-    public static JLabel header;
+    public JLabel login_label;
+    public JLabel pass1_label;
+    public JLabel pass2_label;
+    public JTextField login_ta;
+    public JPasswordField pass1_ta;
+    public JPasswordField pass2_ta;
+    public JButton submit;
+    public JLabel header;
 
     public void clear() {
         if(login_ta != null)
