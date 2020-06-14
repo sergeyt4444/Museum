@@ -1,7 +1,5 @@
 package Client;
 
-import Users.User;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -20,7 +18,7 @@ public class GUI extends JPanel {
     public static Search_Nav_Panel search_nav_panel;
     public static Item_panel item_panel;
     public static Edit_panel edit_panel;
-    public static Nav_panel nav_panel;
+    public static Navigation_panel nav_panel;
     public static JPanel special_panel;
     public static Moderator_panel moderator_panel;
     public static Admin_panel admin_panel;
@@ -43,9 +41,9 @@ public class GUI extends JPanel {
         special_panel.setBackground(Color.DARK_GRAY);
         special_panel.setBorder(BorderFactory.createEmptyBorder());
         login_panel = new Sign_in_panel();
-        nav_panel = new Nav_panel();
+        nav_panel = new Navigation_panel();
         nav_panel.setBounds(20, 40, 200, 400);
-        header = new JLabel("Музей А. М. Горького", JLabel.CENTER);
+        header = new JLabel("Музей истории", JLabel.CENTER);
 //        header.setBounds(240, 250, 800, 200);
         header.setForeground(Color.white);
         header.setFont(font);

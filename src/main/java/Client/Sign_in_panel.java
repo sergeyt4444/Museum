@@ -38,8 +38,8 @@ public class Sign_in_panel extends JPanel {
         password_label.setBounds(40, 90, 80, 24);
         name_log_in_ta.setBounds(125, 37, 100, 24);
         password_ta.setBounds(125, 90, 100, 24);
-        accept.setBounds(160, 150, 100, 24);
-        reg.setBounds(40, 150, 100, 24);
+        accept.setBounds(160, 150, 120, 24);
+        reg.setBounds(20, 150, 120, 24);
         name_log_in_label.setFont(bold);
         name_log_in_ta.setFont(font);
         password_ta.setFont(font);

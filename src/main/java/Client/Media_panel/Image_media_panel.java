@@ -151,11 +151,11 @@ public class Image_media_panel extends JPanel implements Abstract_Media_panel{
             delete.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if(GUI.signed_in_panel == null) {
+                    if(Client.current_user == null) {
                         JOptionPane.showMessageDialog(null, "Не хватает привелегий");
                     }
                     else {
-                        if (Signed_in_panel.user.getStatus().equals("Admin" ) || Signed_in_panel.user.getStatus().equals("Moderator")) {
+                        if (Client.current_user.getStatus().equals("Admin" ) || Client.current_user.getStatus().equals("Moderator")) {
                             Client.delete_media(file_orig);
                             Item_panel.media_main_panel.remove(Image_media_panel.this);
                         }

@@ -44,6 +44,7 @@ public class Item_panel extends JPanel {
     public JLabel links_label;
     public JButton links_button;
     public JTextArea links_textarea;
+    public JButton links_open_button;
     public JLabel media_label;
     public static JPanel media_main_panel;
     public ArrayList<Abstract_Media_panel> media_panels;

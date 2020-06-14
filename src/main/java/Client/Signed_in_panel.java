@@ -12,7 +12,7 @@ public class Signed_in_panel extends JPanel {
     public JLabel login_label;
     public JLabel status_label;
     public JButton quit;
-    public static User user;
+    public User user;
 
     public Signed_in_panel() {
         setBackground(new Color(20,150,250,255));
@@ -27,7 +27,7 @@ public class Signed_in_panel extends JPanel {
         status_label.setFont(font);
         add(login_label);
         add(status_label);
-        quit = new JButton("Sign out");
+        quit = new JButton("Выйти из аккаунта");
         quit.setBounds(100, 144, 100, 28);
         quit.setFont(bold);
         quit.addActionListener(new ActionListener() {
@@ -54,8 +54,8 @@ public class Signed_in_panel extends JPanel {
             add(login_label);
             add(status_label);
         }
-        quit = new JButton("Sign out");
-        quit.setBounds(100, 144, 100, 28);
+        quit = new JButton("Выйти из аккаунта");
+        quit.setBounds(50, 144, 200, 28);
         quit.setFont(bold);
         quit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

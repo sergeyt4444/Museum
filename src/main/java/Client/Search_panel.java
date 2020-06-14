@@ -28,7 +28,7 @@ public class Search_panel extends JPanel {
         Font font = new Font("Times New Roman", Font.PLAIN, 20);
         Font small = new Font("Times New Roman", Font.PLAIN, 16);
         String[] sort_options = new String[] {"По алфавиту", "По популярности"};
-        search = new JButton("Search");
+        search = new JButton("Поиск");
         search_label = new JLabel("Искать");
         search_ta = new JTextField();
 //        sort_label = new JLabel("Сортировать");

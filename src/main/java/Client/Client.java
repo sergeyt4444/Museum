@@ -33,6 +33,7 @@ public class Client {
     public static JFrame jFrame;
     public static DataOutputStream output;
     public static DataInputStream input;
+    public static User current_user;
 
     public static void main(String[] args) {
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Moscow"));
@@ -121,6 +122,7 @@ public class Client {
     }
 
 
+
     public static void mainpage() {
         GUI.central_panel.removeAll();
         GUI.central_panel.add(GUI.header);
@@ -128,19 +130,19 @@ public class Client {
         GUI.search_panel.search_ta.setText("");
         GUI.central_panel.add(GUI.search_panel);
         GUI.central_panel.add(Box.createRigidArea(new Dimension(0, 270)));
+        jFrame.revalidate();
         jFrame.repaint();
     }
 
     public static void login(String login, String password) {
-        //send req
-        //recieve user
-//        User s_user = new User("login", "password", "Admin");
         try {
+            //send request
             User s_user;
             output.writeUTF("login");
             output.writeUTF(login);
             output.writeUTF(password);
 
+            //receive user
             String response = input.readUTF();
             if (response == "null") {
                 s_user = null;
@@ -150,6 +152,7 @@ public class Client {
                 Type type1 = new TypeToken<User>(){}.getType();
                 s_user = json.fromJson(response, type1);
             }
+            current_user = s_user;
 
 
             if (s_user == null) {
@@ -165,19 +168,19 @@ public class Client {
                     GUI.signed_in_panel.insert_user(s_user);
                 }
                 GUI.user_panel.add(GUI.signed_in_panel);
-                if (Signed_in_panel.user.getStatus().equals("Moderator")) {
+                if (current_user.getStatus().equals("Moderator")) {
                     if (GUI.moderator_panel == null) {
                         GUI.moderator_panel = new Moderator_panel();
                     }
                     GUI.special_panel.add(GUI.moderator_panel);
                 }
-                else if (Signed_in_panel.user.getStatus().equals("Admin")) {
+                else if (current_user.getStatus().equals("Admin")) {
                     if (GUI.admin_panel == null) {
                         GUI.admin_panel = new Admin_panel();
                     }
                     GUI.special_panel.add(GUI.admin_panel);
                 }
-                jFrame.validate();
+                jFrame.revalidate();
                 jFrame.repaint();
             }
         } catch (IOException e) {
@@ -186,10 +189,12 @@ public class Client {
     }
 
     public static void logout() {
-        Signed_in_panel.user = new User();
+        current_user = new User();
+        current_user = null;
         GUI.user_panel.remove(GUI.signed_in_panel);
         GUI.user_panel.add(GUI.login_panel);
         GUI.special_panel.removeAll();
+        jFrame.revalidate();
         jFrame.repaint();
         mainpage();
     }
@@ -204,6 +209,7 @@ public class Client {
             GUI.register_panel.clear();
         }
         GUI.central_panel.add(GUI.register_panel);
+        jFrame.revalidate();
         jFrame.repaint();
     }
 
@@ -238,7 +244,7 @@ public class Client {
             }
             GUI.bans_view.Init(jbans);
             GUI.central_panel.add(GUI.bans_view);
-            jFrame.validate();
+            jFrame.revalidate();
             jFrame.repaint();
         } catch (IOException e) {
             e.printStackTrace();
@@ -269,9 +275,9 @@ public class Client {
             if (GUI.ban_panel == null) {
                 GUI.ban_panel = new Ban_panel();
             }
-            GUI.ban_panel.Init(users, Signed_in_panel.user.getId());
+            GUI.ban_panel.Init(users, current_user.getId());
             GUI.central_panel.add(GUI.ban_panel);
-            jFrame.validate();
+            jFrame.revalidate();
             jFrame.repaint();
         } catch (IOException e) {
             e.printStackTrace();
@@ -292,7 +298,7 @@ public class Client {
             }
             GUI.edit_view_panel.Init(jedits);
             GUI.central_panel.add(GUI.edit_view_panel);
-            jFrame.validate();
+            jFrame.revalidate();
             jFrame.repaint();
 
         } catch (IOException e) {
@@ -311,7 +317,7 @@ public class Client {
             ArrayList<JoinedEdit> jedits = json.fromJson(response, type1);
             GUI.edit_view_panel.Init(jedits);
 
-            jFrame.validate();
+            jFrame.revalidate();
             jFrame.repaint();
         } catch (IOException e) {
             e.printStackTrace();
@@ -323,7 +329,7 @@ public class Client {
         try {
             output.writeUTF("delete_ban");
             output.write(BanID);
-            jFrame.validate();
+            jFrame.revalidate();
             jFrame.repaint();
         } catch (IOException e) {
             e.printStackTrace();
@@ -355,7 +361,7 @@ public class Client {
                 GUI.search_full_panel.Init(nsi, number_of_objects);
             }
             GUI.central_panel.add(GUI.search_full_panel);
-            jFrame.validate();
+            jFrame.revalidate();
             jFrame.repaint();
         } catch (IOException e) {
             e.printStackTrace();
@@ -380,7 +386,7 @@ public class Client {
                 else {
                     GUI.search_full_panel.SoftInit(nsi, number_of_objects);
                 }
-                jFrame.validate();
+                jFrame.revalidate();
                 jFrame.repaint();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -407,7 +413,7 @@ public class Client {
                 else {
                     GUI.search_full_panel.SoftInit(nsi, number_of_objects);
                 }
-                jFrame.validate();
+                jFrame.revalidate();
                 jFrame.repaint();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -435,7 +441,7 @@ public class Client {
                 else {
                     GUI.search_full_panel.SoftInit(nsi, number_of_objects);
                 }
-                jFrame.validate();
+                jFrame.revalidate();
                 jFrame.repaint();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -463,7 +469,7 @@ public class Client {
                 else {
                     GUI.search_full_panel.SoftInit(nsi, number_of_objects);
                 }
-                jFrame.validate();
+                jFrame.revalidate();
                 jFrame.repaint();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -473,12 +479,12 @@ public class Client {
 
     }
 
-    public static void view(int number) {
+    public static void view(int ItemID) {
         GUI.central_panel.removeAll();
         //send number, get FullItem
         try {
             output.writeUTF("fullitem");
-            output.write(number);
+            output.write(ItemID);
             Gson json = new GsonBuilder().setPrettyPrinting().create();
             String response = input.readUTF();
             Type type1 = new TypeToken<FullItem>(){}.getType();
@@ -545,7 +551,7 @@ public class Client {
                 GUI.item_panel.Init(fitem, files);
             }
             GUI.central_panel.add(GUI.item_panel);
-            jFrame.validate();
+            jFrame.revalidate();
             jFrame.repaint();
         } catch (IOException e) {
             e.printStackTrace();
@@ -554,16 +560,16 @@ public class Client {
     }
 
     public static void add_media() {
-        if (Signed_in_panel.user == null)
-            Signed_in_panel.user = new User();
-        if(Signed_in_panel.user.getStatus() == null)
-            Signed_in_panel.user.setStatus("");
-        if (Signed_in_panel.user.getStatus().equals("User")|| Signed_in_panel.user.getStatus().equals("Admin" )
-                || Signed_in_panel.user.getStatus().equals("Moderator") ) {
+        if (current_user == null)
+            current_user = new User();
+        if(current_user.getStatus() == null)
+            current_user.setStatus("");
+        if (current_user.getStatus().equals("User")|| current_user.getStatus().equals("Admin" )
+                || current_user.getStatus().equals("Moderator") ) {
             //send data to see bans
             try {
                 output.writeUTF("check_for_bans");
-                output.write(Signed_in_panel.user.getId());
+                output.write(current_user.getId());
                 int banned = input.read();
                 if (banned == 0) {
                     JFileChooser uploader = new JFileChooser();
@@ -585,7 +591,7 @@ public class Client {
                         dos = new DataOutputStream(socket.getOutputStream());
                         dos.writeUTF("upload_file");
                         dos.writeUTF(new File(url).getName());
-                        dos.write(Signed_in_panel.user.getId());
+                        dos.write(current_user.getId());
                         dos.write(Item_panel.item.id);
 
                         BufferedInputStream in =
@@ -622,9 +628,9 @@ public class Client {
         try {
             output.writeUTF("delete_media");
             output.writeUTF(file.toString());
-            output.write(Signed_in_panel.user.getId());
+            output.write(current_user.getId());
             output.write(Item_panel.item.id);
-            jFrame.validate();
+            jFrame.revalidate();
             jFrame.repaint();
         } catch (IOException e) {
             e.printStackTrace();
@@ -632,16 +638,16 @@ public class Client {
     }
 
     public static void edit(FullItem item, String EditType) {
-        if (Signed_in_panel.user == null)
-            Signed_in_panel.user = new User();
-        if(Signed_in_panel.user.getStatus() == null)
-            Signed_in_panel.user.setStatus("");
-        if (Signed_in_panel.user.getStatus().equals("User")|| Signed_in_panel.user.getStatus().equals("Admin" )
-                || Signed_in_panel.user.getStatus().equals("Moderator") ) {
+        if (current_user == null)
+            current_user = new User();
+        if(current_user.getStatus() == null)
+            current_user.setStatus("");
+        if (current_user.getStatus().equals("User")|| current_user.getStatus().equals("Admin" )
+                || current_user.getStatus().equals("Moderator") ) {
             //send data to see bans
             try {
                 output.writeUTF("check_for_bans");
-                output.write(Signed_in_panel.user.getId());
+                output.write(current_user.getId());
                 int banned = input.read();
                 if (banned == 0) {
                     GUI.central_panel.removeAll();
@@ -653,7 +659,7 @@ public class Client {
                             GUI.edit_panel.Init(item1, EditType);
                         }
                         GUI.central_panel.add(GUI.edit_panel);
-                        jFrame.validate();
+                        jFrame.revalidate();
                         jFrame.repaint();
                     }
                 }
@@ -674,18 +680,18 @@ public class Client {
         if (GUI.item_panel != null) {
             GUI.central_panel.add(GUI.item_panel);
         }
-        jFrame.validate();
+        jFrame.revalidate();
         jFrame.repaint();
     }
 
-    public static void commit_edit(String name, String type, String edit) {
+    public static void commit_edit(String name, String EditType, String edit) {
         //send and confirm
         try {
             output.writeUTF("commit_edit");
             output.writeUTF(name);
-            output.writeUTF(type);
+            output.writeUTF(EditType);
             output.writeUTF(edit);
-            output.write(Signed_in_panel.user.getId());
+            output.write(current_user.getId());
 
 
             int accepted = input.read();
@@ -698,8 +704,8 @@ public class Client {
                     GUI.central_panel.add(GUI.item_panel);
                 }
 
-                if (type != null) {
-                    switch (type) {
+                if (EditType != null) {
+                    switch (EditType) {
                         case "Тип": {
                             GUI.item_panel.item.Type = edit;
                             GUI.item_panel.type_label.setText("Тип: " + edit);
@@ -736,7 +742,7 @@ public class Client {
                     }
                 }
 
-                jFrame.validate();
+                jFrame.revalidate();
                 jFrame.repaint();
             }
         } catch (IOException e) {
@@ -749,17 +755,17 @@ public class Client {
             JOptionPane.showMessageDialog(null, "Не хватает привелегий");
         }
         else {
-            if (Signed_in_panel.user.getStatus().equals("Admin" ) || Signed_in_panel.user.getStatus().equals("Moderator")) {
+            if (current_user.getStatus().equals("Admin" ) || current_user.getStatus().equals("Moderator")) {
                 //send to delete
                 try {
                     output.writeUTF("delete_keyword");
                     output.write(item.id);
-                    output.write(Signed_in_panel.user.getId());
+                    output.write(current_user.getId());
                     output.writeUTF(keyword);
 
                     item.Delete_Keyword(keyword);
                     GUI.item_panel.Init(item, files);
-                    jFrame.validate();
+                    jFrame.revalidate();
                     jFrame.repaint();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -776,7 +782,7 @@ public class Client {
             JOptionPane.showMessageDialog(null, "Не хватает привелегий");
         }
         else {
-            if (Signed_in_panel.user.getStatus().equals("Admin" ) || Signed_in_panel.user.getStatus().equals("Moderator")) {
+            if (current_user.getStatus().equals("Admin" ) || current_user.getStatus().equals("Moderator")) {
                 String new_keyword = JOptionPane.showInputDialog("Введите добавляемое ключевое слово");
                 if (new_keyword.length() < 2) {
                     JOptionPane.showMessageDialog(null, "Слишком короткое ключевое слово");
@@ -794,11 +800,11 @@ public class Client {
                         try {
                             output.writeUTF("add_keyword");
                             output.write(item.id);
-                            output.write(Signed_in_panel.user.getId());
+                            output.write(current_user.getId());
                             output.writeUTF(new_keyword);
                             item.Add_Keyword(new_keyword);
                             GUI.item_panel.Init(item, files);
-                            jFrame.validate();
+                            jFrame.revalidate();
                             jFrame.repaint();
                         } catch (IOException e) {
                             e.printStackTrace();

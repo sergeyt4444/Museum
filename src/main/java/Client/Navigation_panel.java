@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Nav_panel extends JPanel {
+public class Navigation_panel extends JPanel {
 
     public JButton main_button;
     public JButton info_button;
@@ -15,7 +15,7 @@ public class Nav_panel extends JPanel {
     public JButton exibitions_button;
     public JButton events_button;
 
-    public Nav_panel() {
+    public Navigation_panel() {
         setBackground(Color.darkGray);
         setBorder(BorderFactory.createLineBorder(Color.white, 2));
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
