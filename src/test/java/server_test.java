@@ -22,11 +22,12 @@ public class server_test {
         ArrayList<User> user_list = m.getUsers();
         ArrayList<Item> item_list = m.getItems();
         ArrayList<Ban> ban_list = m.getBans();
-        ArrayList<Keywords> keyword_list = m.getKeywords();
+//        ArrayList<Keywords> keyword_list = m.getKeywords();
         ArrayList<Media> media_list = m.getMedia();
         ArrayList<FullItem> fullItems = m.getFullItems();
         ArrayList<Edit> edit_list = m.getEdits();
         ArrayList<JoinedBan> jbans = m.getJoinedBans();
+        ArrayList<FullItem> fitems = m.getFullItems();
 
         Gson json = new GsonBuilder().setPrettyPrinting().create();
         String test = json.toJson(user_list);
@@ -35,8 +36,8 @@ public class server_test {
         System.out.println(test);
         test = json.toJson(ban_list);
         System.out.println(test);
-        test = json.toJson(keyword_list);
-        System.out.println(test);
+//        test = json.toJson(keyword_list);
+//        System.out.println(test);
         test = json.toJson(media_list);
         System.out.println(test);
         test = json.toJson(fullItems);
@@ -44,6 +45,8 @@ public class server_test {
         test = json.toJson(edit_list);
         System.out.println(test);
         test = json.toJson(jbans);
+        System.out.println(test);
+        test = json.toJson(fitems);
         System.out.println(test);
 
         User us = m.getUserbyLogPass("Admin", "Admin");

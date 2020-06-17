@@ -35,15 +35,15 @@ public class Search_item extends JPanel{
         setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
         number = num;
         item = new FullItem();
-        item.Name = namestring;
-        item.Type = typestring;
+        item.setName(namestring);
+        item.setType(typestring);
         DrawItem();
     }
 
     private void DrawItem() {
         number_label = new JLabel(Integer.toString(number));
-        name = new JLabel(item.Name);
-        type = new JLabel(item.Type);
+        name = new JLabel(item.getName());
+        type = new JLabel(item.getType());
 
         Font font = new Font("Times New Roman", Font.PLAIN, 32);
 

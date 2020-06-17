@@ -5,6 +5,7 @@ import Bans.JoinedBan;
 import Edits.JoinedEdit;
 import Items.FullItem;
 import Items.Item;
+import Items.Keywords;
 import Items.NShortItems;
 import Users.User;
 
@@ -592,7 +593,7 @@ public class Client {
                         dos.writeUTF("upload_file");
                         dos.writeUTF(new File(url).getName());
                         dos.write(current_user.getId());
-                        dos.write(Item_panel.item.id);
+                        dos.write(Item_panel.item.getId());
 
                         BufferedInputStream in =
                                 new BufferedInputStream(
@@ -609,7 +610,7 @@ public class Client {
                         dos.close();
                         socket.close();
                     }
-                    view(Item_panel.item.id);
+                    view(Item_panel.item.getId());
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Доступ заблокирован");
@@ -629,7 +630,7 @@ public class Client {
             output.writeUTF("delete_media");
             output.writeUTF(file.toString());
             output.write(current_user.getId());
-            output.write(Item_panel.item.id);
+            output.write(Item_panel.item.getId());
             jFrame.revalidate();
             jFrame.repaint();
         } catch (IOException e) {
@@ -652,7 +653,8 @@ public class Client {
                 if (banned == 0) {
                     GUI.central_panel.removeAll();
                     if (item != null && EditType != null) {
-                        Item item1 = new Item(item.Name, item.Type, item.Annotation, item.Parameters, item.Links, item.Lib);
+                        Item item1 = new Item(item.getName(), item.getType(), item.getAnnotation(),
+                                item.getParameters(), item.getLinks(), item.getLib());
                         if (GUI.edit_panel == null) {
                             GUI.edit_panel = new Edit_panel(item1, EditType);
                         } else {
@@ -707,32 +709,32 @@ public class Client {
                 if (EditType != null) {
                     switch (EditType) {
                         case "Тип": {
-                            GUI.item_panel.item.Type = edit;
+                            GUI.item_panel.item.setType(edit);
                             GUI.item_panel.type_label.setText("Тип: " + edit);
                             break;
                         }
                         case "Название": {
-                            GUI.item_panel.item.Name = edit;
+                            GUI.item_panel.item.setName(edit);
                             GUI.item_panel.name_label.setText(edit);
                             break;
                         }
                         case "Технические параметры": {
-                            GUI.item_panel.item.Parameters = edit;
+                            GUI.item_panel.item.setParameters(edit);
                             GUI.item_panel.param_textarea.setText(edit);
                             break;
                         }
                         case "Литература": {
-                            GUI.item_panel.item.Lib = edit;
+                            GUI.item_panel.item.setLib(edit);
                             GUI.item_panel.lib_textarea.setText(edit);
                             break;
                         }
                         case "Ссылки": {
-                            GUI.item_panel.item.Links = edit;
+                            GUI.item_panel.item.setLinks(edit);
                             GUI.item_panel.links_textarea.setText(edit);
                             break;
                         }
                         case "Описание": {
-                            GUI.item_panel.item.Annotation = edit;
+                            GUI.item_panel.item.setAnnotation(edit);
                             GUI.item_panel.ann_textarea.setText(edit);
                             break;
                         }
@@ -759,7 +761,7 @@ public class Client {
                 //send to delete
                 try {
                     output.writeUTF("delete_keyword");
-                    output.write(item.id);
+                    output.write(item.getId());
                     output.write(current_user.getId());
                     output.writeUTF(keyword);
 
@@ -789,7 +791,7 @@ public class Client {
                 }
                 else {
                     int exists = 0;
-                    for (String keyword1 : item.Keywords) {
+                    for (Keywords keyword1 : item.getKwords()) {
                         if (keyword1.equals(new_keyword)) {
                             exists = 1;
                             JOptionPane.showMessageDialog(null, "Такое ключевое слово уже существует");
@@ -799,7 +801,7 @@ public class Client {
                         //send to add
                         try {
                             output.writeUTF("add_keyword");
-                            output.write(item.id);
+                            output.write(item.getId());
                             output.write(current_user.getId());
                             output.writeUTF(new_keyword);
                             item.Add_Keyword(new_keyword);

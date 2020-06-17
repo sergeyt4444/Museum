@@ -41,6 +41,7 @@ public class infr {
                 configuration.addAnnotatedClass(Edit.class);
                 configuration.addAnnotatedClass(JoinedBan.class);
                 configuration.addAnnotatedClass(JoinedEdit.class);
+                configuration.addAnnotatedClass(FullItem.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
 
@@ -80,12 +81,12 @@ public class infr {
         return item;
     }
 
-    public ArrayList<Keywords> getKeywords() {
-        List<Keywords> list = sessionFactory.openSession().createQuery("From Keywords").list();
-        ArrayList<Keywords> arr = new ArrayList<>(list.size());
-        arr.addAll(list);
-        return arr;
-    }
+//    public ArrayList<Keywords> getKeywords() {
+//        List<Keywords> list = sessionFactory.openSession().createQuery("From Keywords").list();
+//        ArrayList<Keywords> arr = new ArrayList<>(list.size());
+//        arr.addAll(list);
+//        return arr;
+//    }
 
     public ArrayList<Ban> getBans() {
         List<Ban> list = sessionFactory.openSession().createQuery("From Ban").list();
@@ -104,6 +105,13 @@ public class infr {
     public ArrayList<Edit> getEdits() {
         List<Edit> list = sessionFactory.openSession().createQuery("From Edit").list();
         ArrayList<Edit> arr = new ArrayList<>(list.size());
+        arr.addAll(list);
+        return arr;
+    }
+
+    public ArrayList<FullItem> getFullItems() {
+        List<FullItem> list = sessionFactory.openSession().createQuery("From FullItem").list();
+        ArrayList<FullItem> arr = new ArrayList<>(list.size());
         arr.addAll(list);
         return arr;
     }
@@ -179,9 +187,9 @@ public class infr {
         System.out.println(kwords.size());
         ArrayList<Item> items = new ArrayList<>();
         for (Keywords kword: kwords) {
-            if (kword.getKeyword().toLowerCase().equals(keyword.toLowerCase())) {
-                items.add((Item)sessionFactory.openSession().get(Item.class, kword.getItemID()));
-            }
+//            if (kword.getKeyword().toLowerCase().equals(keyword.toLowerCase())) {
+//                items.add((Item)sessionFactory.openSession().get(Item.class, kword.getItemID()));
+//            }
         }
         return items;
     }
@@ -206,8 +214,8 @@ public class infr {
         Session session = sessionFactory.openSession();
         Transaction tx1 = session.beginTransaction();
         Keywords keyword = new Keywords();
-        keyword.setItemID(iid);
-        keyword.setKeyword(kword);
+//        keyword.setItemID(iid);
+//        keyword.setKeyword(kword);
         session.save(keyword);
         tx1.commit();
         session.close();

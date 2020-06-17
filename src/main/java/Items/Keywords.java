@@ -1,9 +1,11 @@
 package Items;
 
-import javax.persistence.*;
 
-@Table (name = "Keywords",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"ItemID", "Keyword"})})
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Table (name = "Collections")
 @Entity
 public class Keywords {
 
@@ -12,44 +14,61 @@ public class Keywords {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column (name = "ItemID")
-    private int ItemID;
+    @Column (name = "Collection")
+    private String Collection;
 
-    @Column (name = "Keyword")
-    private String Keyword;
+    @Column (name = "left")
+    private double left;
 
-    public Keywords() {
+    @Column (name = "right")
+    private double right;
 
-    }
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "Items_Collections",
+            joinColumns = { @JoinColumn(name = "KeywordID") },
+            inverseJoinColumns = { @JoinColumn(name = "ItemID") }
+    )
+    private transient Set<FullItem> items = new HashSet<>();
 
-    public Keywords(int itemID, String keyword) {
-        if(itemID > 0 && keyword != null) {
-            ItemID = itemID;
-            Keyword = keyword;
-        }
-    }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public void setItemID(int itemID) {
-        ItemID = itemID;
-    }
-
-    public void setKeyword(String keyword) {
-        Keyword = keyword;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getItemID() {
-        return ItemID;
+    public String getCollection() {
+        return Collection;
     }
 
-    public String getKeyword() {
-        return Keyword;
+    public void setCollection(String collection) {
+        Collection = collection;
+    }
+
+    public double getLeft() {
+        return left;
+    }
+
+    public void setLeft(double left) {
+        this.left = left;
+    }
+
+    public double getRight() {
+        return right;
+    }
+
+    public void setRight(double right) {
+        this.right = right;
+    }
+
+    public Set<FullItem> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<FullItem> items) {
+        this.items = items;
     }
 }

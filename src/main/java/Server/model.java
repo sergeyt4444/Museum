@@ -38,9 +38,9 @@ public class model {
         return inf.getItembyID(ItemID);
     }
 
-    public ArrayList<Keywords> getKeywords() {
-        return inf.getKeywords();
-    }
+//    public ArrayList<Keywords> getKeywords() {
+//        return inf.getKeywords();
+//    }
 
     public ArrayList<Media> getMedia() {
         return inf.getMedia();
@@ -71,21 +71,25 @@ public class model {
         inf.InsertUser(login,password);
     }
 
+//    public ArrayList<FullItem> getFullItems() {
+//        ArrayList<Item> items = getItems();
+//        ArrayList<Keywords> keywords = getKeywords();
+//        ArrayList<FullItem> fullitems = new ArrayList<>();
+//        for (Item item: items) {
+//            FullItem fi = new FullItem();
+//            fi.Fill_item(item);
+//            for (Keywords keyword: keywords) {
+//                if (keyword.getItemID() == fi.id) {
+//                    fi.Add_Keyword(keyword.getKeyword());
+//                }
+//            }
+//            fullitems.add(fi);
+//        }
+//        return fullitems;
+//    }
+
     public ArrayList<FullItem> getFullItems() {
-        ArrayList<Item> items = getItems();
-        ArrayList<Keywords> keywords = getKeywords();
-        ArrayList<FullItem> fullitems = new ArrayList<>();
-        for (Item item: items) {
-            FullItem fi = new FullItem();
-            fi.Fill_item(item);
-            for (Keywords keyword: keywords) {
-                if (keyword.getItemID() == fi.id) {
-                    fi.Add_Keyword(keyword.getKeyword());
-                }
-            }
-            fullitems.add(fi);
-        }
-        return fullitems;
+        return inf.getFullItems();
     }
 
     public ArrayList<Item> SearchbyName(String search_req) {

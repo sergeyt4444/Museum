@@ -487,20 +487,20 @@ public class Item_panel extends JPanel {
 
         if (it != null) {
             item = it;
-            name_label.setText(item.Name);
-            type_label.setText("Тип экспоната: " + item.Type);
-            ann_textarea.setText(item.Annotation);
-            param_textarea.setText(item.Parameters);
-            lib_textarea.setText(item.Lib);
-            links_textarea.setText(item.Links);
+            name_label.setText(item.getName());
+            type_label.setText("Тип экспоната: " + item.getType());
+            ann_textarea.setText(item.getAnnotation());
+            param_textarea.setText(item.getParameters());
+            lib_textarea.setText(item.getLib());
+            links_textarea.setText(item.getLinks());
 
-            for (final String keyword : item.Keywords) {
+            for (final Keywords keyword : item.getKwords()) {
                 JPanel jpanel = new JPanel();
                 jpanel.setBackground(Color.darkGray);
                 jpanel.setBorder(BorderFactory.createEmptyBorder());
                 jpanel.setLayout(new BoxLayout(jpanel, BoxLayout.LINE_AXIS));
 
-                JLabel keyword_label = new JLabel(keyword);
+                JLabel keyword_label = new JLabel(keyword.getCollection());
                 keyword_label.setFont(font);
                 keyword_label.setForeground(Color.white);
                 keyword_label.setPreferredSize(new Dimension(200, 28));
@@ -523,7 +523,7 @@ public class Item_panel extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         System.out.println("Delete " + keyword + " Keyword");
-                        Client.remove_keyword(item, keyword, files);
+                        Client.remove_keyword(item, keyword.getCollection(), files);
                     }
                 });
 
@@ -622,19 +622,19 @@ public class Item_panel extends JPanel {
     public void Init(FullItem fi, ArrayList<File> files) {
         item = fi;
         Font font = new Font("Times New Roman", Font.PLAIN, 16);
-        name_label.setText(fi.Name);
-        type_label.setText("Тип экспоната: "+ fi.Type);
+        name_label.setText(fi.getName());
+        type_label.setText("Тип экспоната: "+ fi.getType());
         keyword_main_panel.removeAll();
         keywords_panels.clear();
         media_main_panel.removeAll();
         media_panels.clear();
-        for (final String keyword : fi.Keywords) {
+        for (final Keywords keyword : fi.getKwords()) {
             JPanel jpanel = new JPanel();
             jpanel.setBackground(Color.darkGray);
             jpanel.setBorder(BorderFactory.createEmptyBorder());
             jpanel.setLayout(new BoxLayout(jpanel, BoxLayout.LINE_AXIS));
 
-            JLabel keyword_label = new JLabel(keyword);
+            JLabel keyword_label = new JLabel(keyword.getCollection());
             keyword_label.setFont(font);
             keyword_label.setForeground(Color.white);
             keyword_label.setPreferredSize(new Dimension(200, 28));
@@ -657,7 +657,7 @@ public class Item_panel extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("Delete " + keyword + " Keyword");
-                    Client.remove_keyword(item, keyword, files);
+                    Client.remove_keyword(item, keyword.getCollection(), files);
                 }
             });
 
@@ -701,10 +701,10 @@ public class Item_panel extends JPanel {
             }
 
         }
-        ann_textarea.setText(fi.Annotation);
-        param_textarea.setText(fi.Parameters);
-        lib_textarea.setText(fi.Lib);
-        links_textarea.setText(fi.Links);
+        ann_textarea.setText(fi.getAnnotation());
+        param_textarea.setText(fi.getParameters());
+        lib_textarea.setText(fi.getLib());
+        links_textarea.setText(fi.getLinks());
 
     }
 }

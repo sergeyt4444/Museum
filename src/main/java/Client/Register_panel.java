@@ -92,7 +92,7 @@ public class Register_panel extends JPanel {
                     pass1 = pass1_ta.getText();
                     pass2 = pass2_ta.getText();
                     if (login.length() < 5 || pass1.length() <5 || pass2.length() <5) {
-                        JOptionPane.showMessageDialog(null, "Пароль и логин должны выключать в себя не менее 5 символов");
+                        JOptionPane.showMessageDialog(null, "Пароль и логин должны включать в себя не менее 5 символов");
                     }
                     if (!(pass1.equals(pass2))) {
                         JOptionPane.showMessageDialog(null, "Проверьте написание пароля");

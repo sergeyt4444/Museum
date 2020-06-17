@@ -171,13 +171,13 @@ public class Socket_manager extends Thread {
                         Item target_item = items.get(number - 1);
                         FullItem fullItem = new FullItem();
                         fullItem.Fill_item(target_item);
-                        ArrayList<Keywords> keywords = Server.m.getKeywords();
-                        for (Keywords keyword: keywords) {
-                            if (keyword.getItemID() == fullItem.id) {
-                                fullItem.Add_Keyword(keyword.getKeyword());
-                            }
-                        }
-                        ArrayList<File> files = Server.m.getMediabyIID(fullItem.id);
+//                        ArrayList<Keywords> keywords = Server.m.getKeywords();
+//                        for (Keywords keyword: keywords) {
+//                            if (keyword.getItemID() == fullItem.id) {
+//                                fullItem.Add_Keyword(keyword.getKeyword());
+//                            }
+//                        }
+                        ArrayList<File> files = Server.m.getMediabyIID(fullItem.getId());
                         output.writeUTF(json.toJson(fullItem));
 
                         output.writeUTF(json.toJson(files));
