@@ -151,4 +151,8 @@ public class FullItem {
     public void Add_Keyword(Keywords kword) {
         Kwords.add(kword);
     }
+
+    public String toString() {
+        return Name;
+    }
 }

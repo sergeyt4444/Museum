@@ -25,6 +25,7 @@ public class GUI extends JPanel {
     public static Edit_view_panel edit_view_panel;
     public static New_item_panel new_item_panel;
     public static Mods_panel mods_panel;
+    public static Delete_item_panel delete_item_panel;
 
 
     public GUI() {

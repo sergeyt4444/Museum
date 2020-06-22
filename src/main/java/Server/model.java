@@ -35,6 +35,10 @@ public class model {
 
     public void PromoteModerator(int ModID) {inf.PromoteModerator(ModID);}
 
+    public void DeleteItem(int ItemID) {
+        inf.DeleteItem(ItemID);
+    }
+
     public ArrayList<Ban> getBans() {
         return inf.getBans();
     }

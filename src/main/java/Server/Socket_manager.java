@@ -84,6 +84,11 @@ public class Socket_manager extends Thread {
                         output.write(unique);
                         break;
                     }
+                    case "fullitems": {
+                        Gson json = new GsonBuilder().setPrettyPrinting().create();
+                        output.writeUTF(json.toJson(Server.m.getFullItems()));
+                        break;
+                    }
                     case "users": {
                         Gson json = new GsonBuilder().setPrettyPrinting().create();
                         output.writeUTF(json.toJson(Server.m.getOnlyUsers()));
@@ -102,6 +107,11 @@ public class Socket_manager extends Thread {
                     case "promote": {
                         int ModID = input.read();
                         Server.m.PromoteModerator(ModID);
+                        break;
+                    }
+                    case "delete_object": {
+                        int ItemID = input.read();
+                        Server.m.DeleteItem(ItemID);
                         break;
                     }
                     case "edits": {

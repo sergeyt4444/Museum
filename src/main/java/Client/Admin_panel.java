@@ -72,6 +72,12 @@ public class Admin_panel extends JPanel {
         delete_object = new JButton("Удалить экспонат");
         delete_object.setFont(font);
         delete_object.setAlignmentX(CENTER_ALIGNMENT);
+        delete_object.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Client.delete_object();
+            }
+        });
         moderators = new JButton("Модераторы");
         moderators.setFont(font);
         moderators.setAlignmentX(CENTER_ALIGNMENT);

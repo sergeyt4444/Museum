@@ -488,6 +488,15 @@ public class infr {
         }
     }
 
+    public void DeleteItem(int ItemID) {
+        Session session = sessionFactory.openSession();
+        Transaction tx1 = session.beginTransaction();
+        FullItem item = (FullItem)session.load(FullItem.class, ItemID);
+        session.delete(item);
+        tx1.commit();
+        session.close();
+    }
+
     public int UpdateItem(String itemName, String editType, String edit) {
         Query query = sessionFactory.openSession().createQuery("From Item where Name = :name");
         query.setParameter("name", itemName);

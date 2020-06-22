@@ -316,6 +316,20 @@ public class Client {
         return users;
     }
 
+    public static ArrayList<FullItem> get_fullitems() {
+        ArrayList<FullItem> items = null;
+        try {
+            output.writeUTF("fullitems");
+            Gson json = new GsonBuilder().setPrettyPrinting().create();
+            String response = input.readUTF();
+            Type type1 = new TypeToken<ArrayList<FullItem>>(){}.getType();
+            items = json.fromJson(response, type1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return items;
+    }
+
     public static void edits() {
         try {
             GUI.central_panel.removeAll();
@@ -378,6 +392,37 @@ public class Client {
         GUI.central_panel.add(GUI.new_item_panel);
         jFrame.revalidate();
         jFrame.repaint();
+    }
+
+    public static void delete_object() {
+        try {
+            GUI.central_panel.removeAll();
+            if (GUI.delete_item_panel == null) {
+                GUI.delete_item_panel = new Delete_item_panel();
+            }
+            output.writeUTF("fullitems");
+            Gson json = new GsonBuilder().setPrettyPrinting().create();
+            String response = input.readUTF();
+            Type type1 = new TypeToken<ArrayList<FullItem>>(){}.getType();
+            ArrayList<FullItem> items = json.fromJson(response, type1);
+            GUI.delete_item_panel.Init(items);
+            GUI.central_panel.add(GUI.delete_item_panel);
+            jFrame.revalidate();
+            jFrame.repaint();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void commit_delete_object(int ItemID) {
+        try {
+            output.writeUTF("delete_object");
+            output.write(ItemID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mainpage();
+
     }
 
     public static int commit_add_object(String name, String type) {
