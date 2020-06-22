@@ -14,8 +14,6 @@ public class GUI extends JPanel {
     public static JLabel header;
     public static Search_panel search_panel;
     public static Search_Full_panel search_full_panel;
-    public static Search_page search_page;
-    public static Search_Nav_Panel search_nav_panel;
     public static Item_panel item_panel;
     public static Edit_panel edit_panel;
     public static Navigation_panel nav_panel;
@@ -25,6 +23,8 @@ public class GUI extends JPanel {
     public static Bans_view_panel bans_view;
     public static Ban_panel ban_panel;
     public static Edit_view_panel edit_view_panel;
+    public static New_item_panel new_item_panel;
+    public static Mods_panel mods_panel;
 
 
     public GUI() {

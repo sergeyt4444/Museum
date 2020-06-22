@@ -48,6 +48,12 @@ public class Socket_manager extends Thread {
             try {
                 String request = input.readUTF();
                 switch (request) {
+                    case "kwords": {
+                        Gson json = new GsonBuilder().setPrettyPrinting().create();
+                        String response = json.toJson(Server.m.getKeywords());
+                        output.writeUTF(response);
+                        break;
+                    }
                     case "login": {
                         String login = input.readUTF();
                         String password = input.readUTF();
@@ -71,9 +77,31 @@ public class Socket_manager extends Thread {
                         Server.m.DeleteBan(BanID);
                         break;
                     }
+                    case "add_object": {
+                        String name = input.readUTF();
+                        String type = input.readUTF();
+                        int unique = Server.m.InsertItem(name, type);
+                        output.write(unique);
+                        break;
+                    }
                     case "users": {
                         Gson json = new GsonBuilder().setPrettyPrinting().create();
                         output.writeUTF(json.toJson(Server.m.getOnlyUsers()));
+                        break;
+                    }
+                    case "moderators": {
+                        Gson json = new GsonBuilder().setPrettyPrinting().create();
+                        output.writeUTF(json.toJson(Server.m.getOnlyMods()));
+                        break;
+                    }
+                    case "demote": {
+                        int ModID = input.read();
+                        Server.m.DemoteModerator(ModID);
+                        break;
+                    }
+                    case "promote": {
+                        int ModID = input.read();
+                        Server.m.PromoteModerator(ModID);
                         break;
                     }
                     case "edits": {
@@ -169,8 +197,9 @@ public class Socket_manager extends Thread {
                         int number = input.read();
                         Gson json = new GsonBuilder().setPrettyPrinting().create();
                         Item target_item = items.get(number - 1);
-                        FullItem fullItem = new FullItem();
-                        fullItem.Fill_item(target_item);
+                        FullItem fullItem = Server.m.getFullItembyID(target_item.getId());
+//                        FullItem fullItem = new FullItem();
+//                        fullItem.Fill_item(target_item);
 //                        ArrayList<Keywords> keywords = Server.m.getKeywords();
 //                        for (Keywords keyword: keywords) {
 //                            if (keyword.getItemID() == fullItem.id) {
@@ -312,12 +341,18 @@ public class Socket_manager extends Thread {
                         break;
                     }
                     case "add_keyword" : {
-                        int item_id = input.read();
+//                        int item_id = input.read();
+//                        int uid = input.read();
+//                        String new_keyword = input.readUTF();
+                        Gson json = new GsonBuilder().setPrettyPrinting().create();
+                        Type type1 = new TypeToken<FullItem>(){}.getType();
+                        String resp = input.readUTF();
+                        FullItem item = json.fromJson(resp, type1);
                         int uid = input.read();
                         String new_keyword = input.readUTF();
                         Date now = new Date();
-                        Server.m.InsertKeyword(item_id, new_keyword);
-                        Server.m.InsertEdit(uid, new_keyword + " - added", item_id, "Keyword", now);
+                        Server.m.AddKeyword(item);
+                        Server.m.InsertEdit(uid, new_keyword + " - added", item.getId() , "Keyword", now);
                         break;
                     }
                     case "delete_keyword" : {

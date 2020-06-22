@@ -9,6 +9,7 @@ import Items.Item;
 import Items.Keywords;
 import Items.Media;
 import Users.User;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.hibernate.*;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -52,6 +53,13 @@ public class infr {
 
     }
 
+    public ArrayList<Keywords> getKeywords() {
+        List<Keywords> list = sessionFactory.openSession().createQuery("From Keywords").list();
+        ArrayList<Keywords> arr = new ArrayList<>(list.size());
+        arr.addAll(list);
+        return arr;
+    }
+
 
     public ArrayList<User> getUsers() {
         List<User> list = sessionFactory.openSession().createQuery("From User").list();
@@ -62,6 +70,13 @@ public class infr {
 
     public ArrayList<User> getOnlyUsers() {
         List<User> list = sessionFactory.openSession().createQuery("From User where status = 'User'").list();
+        ArrayList<User> arr = new ArrayList<>(list.size());
+        arr.addAll(list);
+        return arr;
+    }
+
+    public ArrayList<User> getOnlyMods() {
+        List<User> list = sessionFactory.openSession().createQuery("From User where status = 'Moderator'").list();
         ArrayList<User> arr = new ArrayList<>(list.size());
         arr.addAll(list);
         return arr;
@@ -114,6 +129,13 @@ public class infr {
         ArrayList<FullItem> arr = new ArrayList<>(list.size());
         arr.addAll(list);
         return arr;
+    }
+
+    public FullItem getFullItembyID(int ItemID) {
+        Session session = sessionFactory.openSession();
+        FullItem item = (FullItem) session.get(FullItem.class, ItemID);
+        session.close();
+        return item;
     }
 
     public ArrayList<Media> getMediabyIID(int item_id) {
@@ -186,11 +208,11 @@ public class infr {
         List<Keywords> kwords = criteria.list();
         System.out.println(kwords.size());
         ArrayList<Item> items = new ArrayList<>();
-        for (Keywords kword: kwords) {
+//        for (Keywords kword: kwords) {
 //            if (kword.getKeyword().toLowerCase().equals(keyword.toLowerCase())) {
 //                items.add((Item)sessionFactory.openSession().get(Item.class, kword.getItemID()));
 //            }
-        }
+//        }
         return items;
     }
 
@@ -251,7 +273,36 @@ public class infr {
         Edit edit = (Edit)session.get(Edit.class, EditID);
         tx1.commit();
         if (edit.getEditrow().equals("Keyword")) {
-
+            String edit_string = edit.getEdit();
+            int separator = edit_string.lastIndexOf(" - added");
+            if (separator != -1) {
+                String edit_body = edit_string.substring(0,separator);
+//                Server.m.DeleteMedia(edit.getItemID(), edit_body);
+                Server.m.DeleteKeyword(edit.getItemID(), edit_body);
+                Transaction tx2 = session.beginTransaction();
+                session.delete(edit);
+                tx2.commit();
+            }
+            else {
+                separator = edit_string.lastIndexOf(" - deleted");
+                if (separator != -1) {
+                    String edit_body = edit_string.substring(0,separator);
+  //                      Server.m.InsertMedia(edit_body, edit.getItemID());
+                    FullItem item = Server.m.getFullItembyID(edit.getItemID());
+                    Keywords kword = new Keywords();
+                    ArrayList<Keywords> keywords = Server.m.getKeywords();
+                    for (Keywords kw: keywords) {
+                        if (kw.getCollection().equals(edit_body)) {
+                            kword = kw;
+                        }
+                    }
+                    item.Add_Keyword(kword);
+                    Server.m.AddKeyword(item);
+                    Transaction tx2 = session.beginTransaction();
+                    session.delete(edit);
+                    tx2.commit();
+                }
+            }
         }
         else
             if (edit.getEditrow().equals("Media")) {
@@ -359,10 +410,21 @@ public class infr {
     }
 
     public void DeleteKeyword(int itemID, String kword) {
-        Query query = sessionFactory.openSession().createQuery("delete Keywords where Keyword = :word and ItemID = :iid");
-        query.setParameter("word", kword);
-        query.setParameter("iid", itemID);
-        query.executeUpdate();
+        FullItem item = getFullItembyID(itemID);
+        item.Delete_Keyword(kword);
+        Session session = sessionFactory.openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.update(item);
+        tx1.commit();
+        session.close();
+    }
+
+    public void AddKeyword(FullItem item) {
+        Session session = sessionFactory.openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.update(item);
+        tx1.commit();
+        session.close();
     }
 
     public void DeleteBan(int banID) {
@@ -372,6 +434,44 @@ public class infr {
         session.delete(ban);
         tx1.commit();
         session.close();
+    }
+
+    public void DemoteModerator(int ModID) {
+        Session session = sessionFactory.openSession();
+        Transaction tx1 = session.beginTransaction();
+        User demoted = (User)session.load(User.class, ModID);
+        demoted.setStatus("User");
+        session.update(demoted);
+        tx1.commit();
+        session.close();
+    }
+
+    public void PromoteModerator(int ModID) {
+        Session session = sessionFactory.openSession();
+        Transaction tx1 = session.beginTransaction();
+        User demoted = (User)session.load(User.class, ModID);
+        demoted.setStatus("Moderator");
+        session.update(demoted);
+        tx1.commit();
+        session.close();
+    }
+
+    public int InsertItem(String name, String type) {
+        Query query = sessionFactory.openSession().createQuery("From Item where Name = :name");
+        query.setParameter("name", name);
+        List<User> list = query.list();
+        if (list.isEmpty()) {
+            Item item = new Item();
+            item.setName(name);
+            item.setType(type);
+            Session session = sessionFactory.openSession();
+            Transaction tx1 = session.beginTransaction();
+            session.save(item);
+            tx1.commit();
+            session.close();
+            return 1;
+        }
+        return 0;
     }
 
     public void DeleteMedia(int iid, String file) {

@@ -20,12 +20,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
+import java.security.Key;
 import java.util.*;
 import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.commons.io.FileUtils;
 
 public class Client {
@@ -35,6 +37,8 @@ public class Client {
     public static DataOutputStream output;
     public static DataInputStream input;
     public static User current_user;
+    public static ArrayList<Keywords> keywords;
+
 
     public static void main(String[] args) {
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Moscow"));
@@ -62,6 +66,7 @@ public class Client {
             input = new DataInputStream(sin);
             output = new DataOutputStream(sout);
             System.out.println("Connected");
+            kwords();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -122,6 +127,18 @@ public class Client {
 
     }
 
+
+    public static void kwords() {
+        try {
+            output.writeUTF("kwords");
+            String response = input.readUTF();
+            Gson json = new GsonBuilder().setPrettyPrinting().create();
+            Type type1 = new TypeToken<ArrayList<Keywords>>(){}.getType();
+            keywords = json.fromJson(response, type1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public static void mainpage() {
@@ -283,7 +300,20 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public static ArrayList<User> get_users() {
+        ArrayList<User> users = null;
+        try {
+            output.writeUTF("users");
+            Gson json = new GsonBuilder().setPrettyPrinting().create();
+            String response = input.readUTF();
+            Type type1 = new TypeToken<ArrayList<User>>(){}.getType();
+            users = json.fromJson(response,type1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 
     public static void edits() {
@@ -336,6 +366,70 @@ public class Client {
             e.printStackTrace();
         }
 
+
+    }
+
+    public static void add_object() {
+        GUI.central_panel.removeAll();
+        if (GUI.new_item_panel == null) {
+            GUI.new_item_panel = new New_item_panel();
+        }
+        GUI.new_item_panel.clear();
+        GUI.central_panel.add(GUI.new_item_panel);
+        jFrame.revalidate();
+        jFrame.repaint();
+    }
+
+    public static int commit_add_object(String name, String type) {
+        int unique = 0;
+        try {
+            output.writeUTF("add_object");
+            output.writeUTF(name);
+            output.writeUTF(type);
+            unique = input.read();
+            if (unique == 0) {
+                JOptionPane.showMessageDialog(null, "Экспонат с таким названием уже существует");
+            }
+            else {
+                mainpage();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return unique;
+    }
+
+    public static void moderators() {
+        try {
+            GUI.central_panel.removeAll();
+            output.writeUTF("moderators");
+            Gson json = new GsonBuilder().setPrettyPrinting().create();
+            String response = input.readUTF();
+            Type type1 = new TypeToken<ArrayList<User>>(){}.getType();
+            ArrayList<User> mods = json.fromJson(response, type1);
+            if (GUI.mods_panel == null) {
+                GUI.mods_panel = new Mods_panel();
+            }
+            GUI.mods_panel.Init(mods);
+            GUI.central_panel.add(GUI.mods_panel);
+            jFrame.revalidate();
+            jFrame.repaint();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void demote(int ModID) {
+        try {
+            output.writeUTF("demote");
+            output.write(ModID);
+            jFrame.revalidate();
+            jFrame.repaint();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -779,40 +873,81 @@ public class Client {
         }
     }
 
+    public static void promote() {
+        JComboBox comboBox = new JComboBox();
+        comboBox.setEditable(false);
+        ArrayList<User> users = get_users();
+        for (User user: users) {
+            comboBox.addItem(user);
+        }
+        comboBox.setSelectedIndex(1);
+        JOptionPane.showMessageDialog(null, comboBox, "Повысить до модератора", JOptionPane.QUESTION_MESSAGE);
+        try {
+            output.writeUTF("promote");
+            User user = (User)comboBox.getSelectedItem();
+            output.write(user.getId());
+        } catch (IOException e) {
+            e.printStackTrace();
+        };
+        try {
+            output.writeUTF("moderators");
+            Gson json = new GsonBuilder().setPrettyPrinting().create();
+            String response = input.readUTF();
+            Type type1 = new TypeToken<ArrayList<User>>(){}.getType();
+            ArrayList<User> mods = json.fromJson(response, type1);
+            GUI.mods_panel.Init(mods);
+            jFrame.revalidate();
+            jFrame.repaint();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void add_keyword(FullItem item, ArrayList<File> files) {
         if (GUI.signed_in_panel == null) {
             JOptionPane.showMessageDialog(null, "Не хватает привелегий");
         }
         else {
             if (current_user.getStatus().equals("Admin" ) || current_user.getStatus().equals("Moderator")) {
-                String new_keyword = JOptionPane.showInputDialog("Введите добавляемое ключевое слово");
-                if (new_keyword.length() < 2) {
-                    JOptionPane.showMessageDialog(null, "Слишком короткое ключевое слово");
-                }
-                else {
-                    int exists = 0;
-                    for (Keywords keyword1 : item.getKwords()) {
-                        if (keyword1.equals(new_keyword)) {
-                            exists = 1;
-                            JOptionPane.showMessageDialog(null, "Такое ключевое слово уже существует");
+                JComboBox comboBox = new JComboBox();
+                comboBox.setEditable(false);
+                for (Keywords kw: keywords) {
+                    int not_connected = 1;
+                    for (Keywords kw1 : item.getKwords()) {
+                        if ((kw.getLeft() >= kw1.getLeft() && kw.getRight() <= kw1.getRight()) ||
+                                (kw1.getLeft() >= kw.getLeft() && kw1.getRight() <= kw.getRight())) {
+                            not_connected = 0;
                         }
                     }
-                    if (exists == 0) {
-                        //send to add
-                        try {
-                            output.writeUTF("add_keyword");
-                            output.write(item.getId());
-                            output.write(current_user.getId());
-                            output.writeUTF(new_keyword);
-                            item.Add_Keyword(new_keyword);
-                            GUI.item_panel.Init(item, files);
-                            jFrame.revalidate();
-                            jFrame.repaint();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    if (not_connected == 1) {
+                        comboBox.addItem(kw);
                     }
                 }
+                comboBox.setSelectedIndex(1);
+
+                JOptionPane.showMessageDialog(null, comboBox, "Добавляемое ключевое слово", JOptionPane.QUESTION_MESSAGE);
+                System.out.println(comboBox.getSelectedItem().toString());//                        try {
+                try {
+                    Keywords kword = new Keywords();
+                    for (Keywords kw: keywords) {
+                        if (kw.getCollection().equals(comboBox.getSelectedItem().toString())) {
+                            kword = kw;
+                        }
+                    }
+                    item.Add_Keyword(kword);
+                    output.writeUTF("add_keyword");
+                    Gson json = new GsonBuilder().setPrettyPrinting().create();
+                    output.writeUTF(json.toJson(item));
+                    output.write(current_user.getId());
+                    output.writeUTF(comboBox.getSelectedItem().toString());
+                    GUI.item_panel.Init(item, files);
+                    jFrame.revalidate();
+                    jFrame.repaint();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
             }
             else {
                 JOptionPane.showMessageDialog(null, "Только пользователи с правами модератора и выше могут удалять ключевые слова.");

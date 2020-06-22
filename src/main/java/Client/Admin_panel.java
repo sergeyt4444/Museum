@@ -63,12 +63,24 @@ public class Admin_panel extends JPanel {
         add_object = new JButton("Добавить экспонат");
         add_object.setFont(font);
         add_object.setAlignmentX(CENTER_ALIGNMENT);
+        add_object.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Client.add_object();
+            }
+        });
         delete_object = new JButton("Удалить экспонат");
         delete_object.setFont(font);
         delete_object.setAlignmentX(CENTER_ALIGNMENT);
         moderators = new JButton("Модераторы");
         moderators.setFont(font);
         moderators.setAlignmentX(CENTER_ALIGNMENT);
+        moderators.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Client.moderators();
+            }
+        });
 
         container.add(Box.createHorizontalGlue());
         container.add(Box.createVerticalGlue());

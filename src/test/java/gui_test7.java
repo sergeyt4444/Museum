@@ -20,9 +20,9 @@ public class gui_test7 extends JPanel {
 
         FullItem fitem = new FullItem();
         fitem.Fill_item(item);
-        fitem.Add_Keyword("Test");
-        fitem.Add_Keyword("Test2");
-        fitem.Add_Keyword("Test3");
+//        fitem.Add_Keyword("Test");
+//        fitem.Add_Keyword("Test2");
+//        fitem.Add_Keyword("Test3");
 
         Item_panel ipanel = new Item_panel(fitem, null);
         ipanel.setBounds(100, 100, 500, 600);

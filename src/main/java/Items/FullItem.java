@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Table(name = "Items")
@@ -33,19 +34,19 @@ public class FullItem {
     @Column (name = "Lib")
     private String Lib;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Items_Collections",
             joinColumns = { @JoinColumn(name = "ItemID") },
             inverseJoinColumns = { @JoinColumn(name = "KeywordID") }
     )
-    private Set<Keywords> Kwords;
+    private List<Keywords> Kwords;
 
     public FullItem() {
-        Kwords = new HashSet<>();
+        Kwords = new ArrayList<>();
     }
 
-    public FullItem(int ItemID, String name, String type, String annotation, String param, String links, String lib, HashSet<Keywords> keywords) {
+    public FullItem(int ItemID, String name, String type, String annotation, String param, String links, String lib, ArrayList<Keywords> keywords) {
         id = ItemID;
         Name = name;
         Type = type;
@@ -54,7 +55,7 @@ public class FullItem {
         Links = links;
         Lib = lib;
         if (keywords==null) {
-            Kwords = new HashSet<>();
+            Kwords = new ArrayList<>();
         }
         else {
            Kwords = keywords;
@@ -127,19 +128,27 @@ public class FullItem {
         Lib = lib;
     }
 
-    public Set<Keywords> getKwords() {
-        return Kwords;
+    public ArrayList<Keywords> getKwords() {
+        return (ArrayList<Keywords>) Kwords;
     }
 
-    public void setKwords(Set<Keywords> kwords) {
+    public void setKwords(ArrayList<Keywords> kwords) {
         Kwords = kwords;
     }
 
     public void Delete_Keyword(String kword) {
-        Kwords.remove(kword);
+        Keywords kword_del = null;
+        for (Keywords kw : Kwords) {
+            if (kw.getCollection().equals(kword)) {
+                kword_del = kw;
+            }
+        }
+        if (kword_del != null) {
+            Kwords.remove(kword_del);
+        }
     }
 
-    public void Add_Keyword(String kword) {
-        Kwords.add(new Keywords());
+    public void Add_Keyword(Keywords kword) {
+        Kwords.add(kword);
     }
 }

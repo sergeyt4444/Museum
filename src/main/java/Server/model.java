@@ -11,12 +11,15 @@ import Items.Media;
 import Users.User;
 
 import java.io.File;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class model {
 
     infr inf = new infr();
+
+    public ArrayList<Keywords> getKeywords() { return inf.getKeywords(); }
 
     public ArrayList<User> getUsers() {
         return inf.getUsers();
@@ -25,6 +28,12 @@ public class model {
     public ArrayList<User> getOnlyUsers() {
         return inf.getOnlyUsers();
     }
+
+    public ArrayList<User> getOnlyMods() {return inf.getOnlyMods();}
+
+    public void DemoteModerator(int ModID) {inf.DemoteModerator(ModID);}
+
+    public void PromoteModerator(int ModID) {inf.PromoteModerator(ModID);}
 
     public ArrayList<Ban> getBans() {
         return inf.getBans();
@@ -36,6 +45,10 @@ public class model {
 
     public Item getItembyID(int ItemID) {
         return inf.getItembyID(ItemID);
+    }
+
+    public FullItem getFullItembyID(int ItemID) {
+        return inf.getFullItembyID(ItemID);
     }
 
 //    public ArrayList<Keywords> getKeywords() {
@@ -118,7 +131,15 @@ public class model {
         inf.DeleteKeyword(ItemID, kword);
     }
 
+    public void AddKeyword(FullItem item) {
+        inf.AddKeyword(item);
+    }
+
     public void DeleteBan(int BanID) {inf.DeleteBan(BanID);}
+
+    public int InsertItem(String name, String type) {
+        return inf.InsertItem(name, type);
+    }
 
     public void DeleteMedia(int iid, String file) {inf.DeleteMedia(iid, file);}
 
